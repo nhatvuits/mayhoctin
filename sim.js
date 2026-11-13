@@ -1,5 +1,5 @@
 /* May Học Tin: phòng mô phỏng "Khám phá bên trong máy tính".
-   Bốn chặng: Khám phá (chạm từng bộ phận) → Tìm hiểu (Mây kể chuyện) → Thực hành (kéo thả lắp máy) → Thử thách (câu đố).
+   Bốn chặng: Khám phá (chạm từng bộ phận) → Tìm hiểu (May kể chuyện) → Thực hành (kéo thả lắp máy) → Thử thách (câu đố).
    Nạp trước app.js; mọi hàm chỉ chạy sau khi app.js đã sẵn sàng. Hình vẽ bằng SVG, không cần tệp ảnh. */
 
 /* ============ HÌNH VẼ TỪNG BỘ PHẬN ============ */
@@ -174,14 +174,14 @@ function smExplore(){const m=SM(),view=SIM.view,ids=view==='case'?['case'].conca
  return `<div class="sm-grid"><div class="stack" style="gap:12px">${pre}${smScene({view,click:'part',hi:SIM.sel?[SIM.sel]:[],on:true,cab:SM_OUT,hot:ids})}
  <div><div class="row" style="justify-content:space-between;margin-bottom:6px"><b>${t(`Em đã khám phá ${m.seen.length}/${PARTS.length} bộ phận`,`You have explored ${m.seen.length} of ${PARTS.length} parts`)}</b></div><div class="bar"><i style="width:${m.seen.length/PARTS.length*100}%"></i></div></div>
  <div class="chips">${PARTS.map(p=>`<button class="chip sm ${SIM.sel===p.id?'sel':''}" data-act="sim" data-k="part" data-v="${p.id}">${m.seen.includes(p.id)?'✓ ':''}${smN(p.id)}</button>`).join('')}</div></div>
- <div class="sm-side">${smMay(all?t('Giỏi quá! Em đã khám phá hết rồi. Sang chặng Tìm hiểu để nghe Mây kể chuyện nhé.','Well done! You have explored everything. Go on to Learn and let Mây tell you the story.'):SIM.sel?t('Em chạm tiếp vào dấu + khác để khám phá cho đủ nhé.','Tap another + to explore them all.'):view==='case'?t('Đây là bên trong thùng máy. Chạm vào dấu + để xem từng bộ phận.','This is the inside of the case. Tap a + to look at each part.'):t('Chạm vào dấu + để khám phá. Chạm vào thùng máy để nhìn vào bên trong!','Tap a + to explore. Tap the case to look inside!'))}
+ <div class="sm-side">${smMay(all?t('Giỏi quá! Em đã khám phá hết rồi. Sang chặng Tìm hiểu để nghe May kể chuyện nhé.','Well done! You have explored everything. Go on to Learn and let May tell you the story.'):SIM.sel?t('Em chạm tiếp vào dấu + khác để khám phá cho đủ nhé.','Tap another + to explore them all.'):view==='case'?t('Đây là bên trong thùng máy. Chạm vào dấu + để xem từng bộ phận.','This is the inside of the case. Tap a + to look at each part.'):t('Chạm vào dấu + để khám phá. Chạm vào thùng máy để nhìn vào bên trong!','Tap a + to explore. Tap the case to look inside!'))}
  ${SIM.sel?smInfo(SIM.sel):''}${all?`<button class="btn primary" data-act="sim" data-k="mode" data-v="learn">${t('Sang chặng Tìm hiểu','Go on to Learn')} →</button>`:''}</div></div>`}
 
 /* ============ CHẶNG 2: TÌM HIỂU ============ */
 function smLearn(){const n=SM_TOUR.length,i=Math.min(SIM.tour,n-1),st=SM_TOUR[i],last=i===n-1;
  return `<div class="sm-grid"><div class="stack" style="gap:12px">${smScene({view:st.v,hi:st.hi,on:true,cab:SM_OUT,txt:st.txt})}
  <div class="bar"><i style="width:${(i+1)/n*100}%"></i></div></div>
- <div class="sm-side"><div class="qtype">${i>=8?t('Các bộ phận làm việc cùng nhau','How the parts work together'):t('Mây kể chuyện','Mây’s story')} · ${i+1}/${n}</div>${smMay(smT(st.s))}
+ <div class="sm-side"><div class="qtype">${i>=8?t('Các bộ phận làm việc cùng nhau','How the parts work together'):t('May kể chuyện','May’s story')} · ${i+1}/${n}</div>${smMay(smT(st.s))}
  <div class="chips">${st.hi.map(id=>`<span class="pill">${smN(id)}</span>`).join('')}</div>
  <div class="row"><button class="btn" data-act="sim" data-k="tour" data-v="-1" ${i?'':'disabled'}>← ${t('Quay lại','Back')}</button>${last?`<button class="btn primary" data-act="sim" data-k="tourend">${t('Sang chặng Thực hành','Go on to Build')} →</button>`:`<button class="btn primary" data-act="sim" data-k="tour" data-v="1">${t('Tiếp theo','Next')} →</button>`}</div></div></div>`}
 
@@ -266,7 +266,7 @@ function SIMA(k,v){const m=SM(),b=SIM.b,q=SIM.q;if(b)b.last=null;
   if(v==='case'&&SIM.view==='desk')SIM.view='case';else if(SM_IN.includes(v))SIM.view='case';else if(SM_OUT.includes(v))SIM.view='desk';
   SIM.sel=v;sfx('tap');if(!m.seen.includes(v)){m.seen.push(v);save();touch();if(m.seen.length===PARTS.length){sfx('win');confetti();toast(t('Em đã khám phá đủ 11 bộ phận! +1 sao','You explored all 11 parts! +1 star'))}else sfx('star')}return}
  case 'tour':SIM.tour=Math.max(0,Math.min(SM_TOUR.length-1,SIM.tour+ +v));sfx(SIM.tour>=8&&+v>0?'star':'tap');return;
- case 'tourend':if(!m.tour){m.tour=1;save();touch();sfx('win');toast(t('Em đã nghe hết câu chuyện của Mây! +1 sao','You finished Mây’s story! +1 star'))}SIM.mode='build';SIM.tour=0;try{window.scrollTo(0,0)}catch(e){}return;
+ case 'tourend':if(!m.tour){m.tour=1;save();touch();sfx('win');toast(t('Em đã nghe hết câu chuyện của May! +1 sao','You finished May’s story! +1 star'))}SIM.mode='build';SIM.tour=0;try{window.scrollTo(0,0)}catch(e){}return;
  case 'pickp':if(!b||Date.now()-SIM.noClick<350)return false;b.sel=b.sel===v?null:v;b.blink=null;sfx('tap');return;
  case 'slot':if(!b)return false;if(!b.sel){b.msg=['Em chạm chọn một bộ phận ở khay linh kiện trước nhé.','Tap a part in the tray first.'];sfx('err');return}smTry(b.sel,v);smAfter();return;
  case 'hint':{if(!b)return false;const id=b.sel&&smSlots().includes(b.sel)?b.sel:(b.stage===1?SM_IN:SM_OUT).find(x=>!b.done.includes(x));if(!id)return false;b.blink=id;b.sel=id;b.msg=[`Tìm ${smLo(id,0)} nhé. ${PM[id].put[0]}`,`Look for the ${smLo(id,1)}. ${PM[id].put[1]}`];sfx('tap');return}
