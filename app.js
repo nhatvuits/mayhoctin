@@ -1,4 +1,4 @@
-/* Mây Học Tin: giao diện, âm thanh, điều hướng. Dữ liệu ở data.js (tiếng Việt) và en.js (tiếng Anh). */
+/* May Học Tin: giao diện, âm thanh, điều hướng. Dữ liệu ở data.js (tiếng Việt) và en.js (tiếng Anh). */
 const GLOSS=[
 ['Hardware','Phần cứng','Các bộ phận sờ được của máy tính.','The parts of a computer you can touch.'],['Software','Phần mềm','Các chương trình chạy trên máy tính.','The programs that run on a computer.'],
 ['Operating system','Hệ điều hành','Phần mềm quản lý cả máy tính, ví dụ Windows.','The software that manages the whole computer, like Windows.'],['Input device','Thiết bị vào','Đưa thông tin vào máy: bàn phím, chuột.','Sends information in: keyboard, mouse.'],
@@ -207,7 +207,7 @@ const NAV=[['trang-chu','Bài học','Lessons','<path d="M4 5a2 2 0 0 1 2-2h13v1
 
 function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=='sky')document.body.dataset.skin=S.skin;else delete document.body.dataset.skin;
  const on=n=>n===view||(n==='trang-chu'&&(view.startsWith('hoc-')||view==='may-tinh'||(view==='lam-bai'&&W&&W.mode!=='exam')))||(n==='thi-thu'&&view==='lam-bai'&&W&&W.mode==='exam')||(n==='phu-huynh'&&view==='giay-khen');
- document.getElementById('head').innerHTML=`<a class="logo" href="#trang-chu"><svg viewBox="0 0 100 70" aria-hidden="true"><path d="M26 60a17 17 0 0 1-2-34 24 24 0 0 1 46-4 19 19 0 0 1 6 38z" fill="#fff" stroke="#12305a" stroke-width="3"/><circle cx="40" cy="40" r="3.5" fill="#12305a"/><circle cx="60" cy="40" r="3.5" fill="#12305a"/><path d="M43 49q7 6 14 0" fill="none" stroke="#12305a" stroke-width="3" stroke-linecap="round"/></svg><span>Mây Học Tin</span></a>
+ document.getElementById('head').innerHTML=`<a class="logo" href="#trang-chu"><svg viewBox="0 0 100 70" aria-hidden="true"><path d="M26 60a17 17 0 0 1-2-34 24 24 0 0 1 46-4 19 19 0 0 1 6 38z" fill="#fff" stroke="#12305a" stroke-width="3"/><circle cx="40" cy="40" r="3.5" fill="#12305a"/><circle cx="60" cy="40" r="3.5" fill="#12305a"/><path d="M43 49q7 6 14 0" fill="none" stroke="#12305a" stroke-width="3" stroke-linecap="round"/></svg><span>May Học Tin</span></a>
  <nav class="topnav" aria-label="${t('Mục chính','Main sections')}">${NAV.map(n=>`<a href="#${n[0]}" ${on(n[0])?'aria-current="page"':''}>${t(n[1],n[2])}</a>`).join('')}</nav>
  <div class="tools"><div class="seg" role="group" aria-label="${t('Ngôn ngữ','Language')}"><button class="${en()?'':'on'}" data-act="lang" data-v="vi"><span class="full">Tiếng Việt</span><span class="short">VI</span></button><button class="${en()?'on':''}" data-act="lang" data-v="en"><span class="full">English</span><span class="short">EN</span></button></div>
  <button class="toolbtn ${panelOpen?'on':''}" data-act="panel" aria-expanded="${panelOpen}">${ic('<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1.2"/><circle cx="12" cy="7.5" r="1.2"/><circle cx="15.5" cy="10" r="1.2"/><path d="M12 21c-1.5 0-2-1.2-1.3-2.4.7-1.2 2.3-1.1 3.8-1.1"/>')}<span>${t('Hồ sơ, màu, âm thanh','Profile, colours, sounds')}</span></button></div>`;
@@ -223,7 +223,7 @@ function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=
   <label class="lbl" for="try-in">${t('Gõ thử vào đây để nghe','Type here to hear it')}</label><input id="try-in" class="field" autocomplete="off" placeholder="${t('Gõ gì cũng được','Type anything')}">
  </section>`:'';
  document.getElementById('tabbar').innerHTML=NAV.map(n=>`<a href="#${n[0]}" ${on(n[0])?'aria-current="page"':''}>${ic(n[3])}<span>${t(n[1],n[4]||n[2])}</span></a>`).join('');
- document.getElementById('foot').textContent=t('Mây Học Tin là trang luyện tập miễn phí. Câu hỏi do trang tự biên soạn theo các chủ đề của IC3 Spark và chương trình Tin học tiểu học, không phải đề thi chính thức.','Mây Học Tin is a free practice site. Its questions are written by the site around the IC3 Spark topics and the Vietnamese primary informatics curriculum. They are not official exam questions.')}
+ document.getElementById('foot').textContent=t('May Học Tin là trang luyện tập miễn phí. Câu hỏi do trang tự biên soạn theo các chủ đề của IC3 Spark và chương trình Tin học tiểu học, không phải đề thi chính thức.','May Học Tin is a free practice site. Its questions are written by the site around the IC3 Spark topics and the Vietnamese primary informatics curriculum. They are not official exam questions.')}
 
 function mission(){const x=TOPICS.find(y=>tstate(y.id)!=='done');
  if(!x)return {txt:t('Em đã hoàn thành mọi chủ đề. Giờ thì thi thử nhé!','Every topic is done. Time for a practice exam!'),pct:100,btn:`<a class="btn primary" href="#thi-thu">${t('Vào phòng thi thử','Go to the exam room')} →</a>`};
@@ -338,19 +338,29 @@ function newType(lv){const L=TL[lv],rnd=s=>s[Math.floor(Math.random()*s.length)]
  else{const pool=shuffle(TW[L[4]][en()?1:0]);if(L[4]==='s')text=pool[0];else{const out=[];let n=0;for(const p of pool){const k=p.split(' ').length;if(n+k>8)continue;out.push(p);n+=k;if(n>=8)break}text=out.join(' ')}}
  TY={lv,text,n:text.split(' ').length,pos:0,err:0,t0:0,done:false,combo:0,maxCombo:0}}
 const tyDone=()=>TY.text.slice(0,TY.pos).split(' ').length-1+(TY.pos>=TY.text.length?1:0);
+/* bàn phím chạm trên màn hình cho điện thoại, máy tính bảng: S.tkb = 'touch' | 'real'; chưa chọn thì tự nhận theo thiết bị */
+const tkbOn=()=>{if(S.tkb)return S.tkb==='touch';try{return matchMedia('(pointer:coarse)').matches}catch(e){return false}};
+const TKR=['qwertyuiop','asdfghjkl','zxcvbnm'];
+function tkbUI(kid){return `<div class="tkb">${TKR.map((r,i)=>`<div class="tkr tkr${i}">${[...r].map(k=>`<button class="key ${zoneOf(k)}${k===kid?' next':''}${k==='f'||k==='j'?' bump':''}" data-tk="${k}" aria-label="${k.toUpperCase()}">${k}</button>`).join('')}</div>`).join('')}<div class="tkr"><button class="key zt sp${kid==='space'?' next':''}" data-tk=" ">${t('phím cách','space')}</button></div></div>`}
+/* chế độ toàn màn hình: ẩn thanh trên, thanh dưới, chân trang; trình duyệt nào cho phép thì mở toàn màn hình thật */
+let FOCUS=false,FSON=false;
+const focusable=()=>view==='go-phim'||view==='may-tinh';
+function setFocus(on){FOCUS=on;try{const d=document,el=d.documentElement;if(on){const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f)Promise.resolve(f.call(el)).catch(()=>{})}else if(d.fullscreenElement||d.webkitFullscreenElement){const x=d.exitFullscreen||d.webkitExitFullscreen;if(x)Promise.resolve(x.call(d)).catch(()=>{})}}catch(e){}}
+const focusBtn=()=>`<button class="toolbtn focusbtn ${FOCUS?'on':''}" data-act="focus" aria-pressed="${FOCUS}">${ic(FOCUS?'<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>':'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>')}<span>${FOCUS?t('Thoát toàn màn hình','Exit full screen'):t('Toàn màn hình','Full screen')}</span></button>`;
 function vType(){if(!TY.text)newType(TY.lv||0);const st=S.tstar||{};
- return `<div class="stack"><section class="card stack"><div><h1>${t('Mây du hành bàn phím','Mây’s keyboard journey')}</h1><p>${t('Giúp Mây bay qua 5 vùng đất. Đặt hai ngón trỏ lên <kbd>F</kbd> và <kbd>J</kbd>, nhìn màn hình rồi gõ theo dòng chữ. Không cần gõ nhanh, gõ đúng mới được nhiều sao.','Help Mây fly across 5 lands. Rest your index fingers on <kbd>F</kbd> and <kbd>J</kbd>, look at the screen and type the line. No need to rush: accuracy earns the stars.')}</p></div>
+ return `<div class="stack"><section class="card stack nofocus"><div><h1>${t('Mây du hành bàn phím','Mây’s keyboard journey')}</h1><p>${t('Giúp Mây bay qua 5 vùng đất. Đặt hai ngón trỏ lên <kbd>F</kbd> và <kbd>J</kbd>, nhìn màn hình rồi gõ theo dòng chữ. Không cần gõ nhanh, gõ đúng mới được nhiều sao.','Help Mây fly across 5 lands. Rest your index fingers on <kbd>F</kbd> and <kbd>J</kbd>, look at the screen and type the line. No need to rush: accuracy earns the stars.')}</p></div>
  <div class="tg-levels">${SCN.map((sc,si)=>`<div class="tg-grp"><div class="tg-gh"><i style="background:${sc[2]}"></i>${t(sc[0],sc[1])}</div><div class="chips">${TL.map((l,i)=>l[0]!==si?'':`<button class="chip ${i===TY.lv?'sel':''}" data-act="lv" data-v="${i}">${i+1}. ${t(l[1],l[2])} ${starsH(st[i]||0)}</button>`).join('')}</div></div>`).join('')}</div></section>
- <section class="card stack"><div id="type-zone" class="stack"></div>
- <div class="row"><label class="muted" for="type-in">${t('Dùng máy tính bảng? Chạm vào ô này để mở bàn phím','On a tablet? Tap this box to open the keyboard')}</label><input id="type-in" class="field" style="width:150px" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${t('Gõ ở đây','Type here')}"></div>
- <p class="muted">${t('Nhớ tắt bộ gõ tiếng Việt khi chơi. Tiếng bàn phím đang là','Turn off any Vietnamese typing tool while you play. Keyboard sound')}: <b>${t(...(KEYMODES.find(k=>k[0]===S.keys)||KEYMODES[0]).slice(1))}</b>. <button class="linkbtn" data-act="panel">${t('Đổi tiếng phím','Change it')}</button></p></section></div>`}
+ <section class="card stack tgcard"><div id="type-zone" class="stack"></div>
+ <div class="row tg-mode"><span class="lbl">${t('Em gõ bằng','Type with')}</span><div class="seg"><button class="${tkbOn()?'on':''}" data-act="tkb" data-v="touch">${t('Bàn phím trên màn hình','On-screen keyboard')}</button><button class="${tkbOn()?'':'on'}" data-act="tkb" data-v="real">${t('Bàn phím thật','Real keyboard')}</button></div></div>
+ ${tkbOn()?'':`<div class="row nofocus"><label class="muted" for="type-in">${t('Dùng máy tính bảng? Chạm vào ô này để mở bàn phím','On a tablet? Tap this box to open the keyboard')}</label><input id="type-in" class="field" style="width:150px" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${t('Gõ ở đây','Type here')}"></div>`}
+ <p class="muted nofocus">${t('Nhớ tắt bộ gõ tiếng Việt khi chơi. Tiếng bàn phím đang là','Turn off any Vietnamese typing tool while you play. Keyboard sound')}: <b>${t(...(KEYMODES.find(k=>k[0]===S.keys)||KEYMODES[0]).slice(1))}</b>. <button class="linkbtn" data-act="panel">${t('Đổi tiếng phím','Change it')}</button></p></section></div>`}
 function lineH(){const {text,pos}=TY,ch=text[pos];return `<span class="d">${esc(text.slice(0,pos))}</span>${ch==null?'':`<span class="c">${ch===' '?'␣':esc(ch)}</span>`}<span class="r">${esc(text.slice(pos+1))}</span>`}
 function statsH(){const acc=TY.pos+TY.err?Math.round(TY.pos/(TY.pos+TY.err)*100):100,sc=SCN[TL[TY.lv][0]];
  return `<span class="stat"><b>${tyDone()}</b>/${TY.n} · ${t(sc[3],sc[4]).replace(/^\S+\s/,'')}</span><span class="stat"><b>${acc}%</b>${t('chính xác','accuracy')}</span><span class="stat"><b>${TY.combo}</b>${t('phím đúng liên tiếp','keys in a row')}</span>`}
 function guideH(){const ch=TY.text[TY.pos],kid=ch===' '?'space':ch,fg=FING[ch]||['','',-1];
- return `<p class="tg-tip">${t('Phím kế tiếp','Next key')}: <kbd>${ch===' '?t('phím cách','Space'):ch.toUpperCase()}</kbd> ${t('bằng ngón '+fg[0],'with your '+fg[1])}</p><div class="tg-kb">${kbUI(id=>zoneOf(id)+(id===kid?' next':''),false)}</div>${handsSVG(fg[2])}`}
+ return `<p class="tg-tip">${t('Phím kế tiếp','Next key')}: <kbd>${ch===' '?t('phím cách','Space'):ch.toUpperCase()}</kbd> ${t('bằng ngón '+fg[0],'with your '+fg[1])}</p><div class="tg-kb">${tkbOn()?tkbUI(kid):kbUI(id=>zoneOf(id)+(id===kid?' next':''),false)}</div>${tkbOn()?'':handsSVG(fg[2])}`}
 function drawType(){const z=document.getElementById('type-zone');if(!z)return;const L=TL[TY.lv],sc=L[0];
- let h=`<div class="row" style="justify-content:space-between"><h2>${t('Chặng','Stage')} ${TY.lv+1}: ${t(L[1],L[2])}</h2><span class="pill">${t(SCN[sc][0],SCN[sc][1])}</span></div>
+ let h=`<div class="row" style="justify-content:space-between"><h2>${t('Chặng','Stage')} ${TY.lv+1}: ${t(L[1],L[2])}</h2><span class="row" style="gap:8px"><span class="pill nofocus">${t(SCN[sc][0],SCN[sc][1])}</span>${focusBtn()}</span></div>
  <div class="tg-scene" id="tg-scene">${sceneSVG(sc,TY.n,tyDone())}<div class="tg-may" id="tg-may" style="left:${2+TY.pos/TY.text.length*82}%">${CLOUD}</div>${TY.done?'':`<div class="tg-line" id="tg-line">${lineH()}</div>`}</div>`;
  if(TY.done){const best=(S.typing||{})[TY.lv]||0;
   h+=`<div class="fb good tg-res"><h3>${TY.stars>=3?t('Tuyệt vời! Mây đã tới nơi an toàn.','Wonderful! Mây arrived safely.'):t('Mây đã tới nơi!','Mây made it!')}</h3><div class="row">${starsH(TY.stars).replace('class="stars"','class="stars big"')}</div>
@@ -385,7 +395,7 @@ function vGloss(){const g=GLOSS[GL.i];
 let resetArm=false;
 function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luyện','Not started')}</span>`:p>=80?`<span class="pill ok">${t('Vững','Solid')}</span>`:p>=50?`<span class="pill warn">${t('Cần ôn thêm','Needs review')}</span>`:`<span class="pill bad">${t('Còn yếu','Weak')}</span>`;
  const who=S.name?esc(S.name):t('con','your child');
- return `<div class="stack"><section class="card lesson"><h1>${t('Dành cho phụ huynh','For parents')}</h1><p>${t('Trang này giúp ba mẹ theo dõi tiến độ của con và hiểu cách dùng Mây Học Tin để ôn thi IC3 Spark.','This page shows your child’s progress and explains how to use Mây Học Tin to prepare for IC3 Spark.')}</p></section>
+ return `<div class="stack"><section class="card lesson"><h1>${t('Dành cho phụ huynh','For parents')}</h1><p>${t('Trang này giúp ba mẹ theo dõi tiến độ của con và hiểu cách dùng May Học Tin để ôn thi IC3 Spark.','This page shows your child’s progress and explains how to use May Học Tin to prepare for IC3 Spark.')}</p></section>
  ${vReport()}
  ${vGuide()}
  <section class="card stack"><h2>${t('Lịch học gợi ý cho bé 10 tuổi','A suggested timetable for a 10-year-old')}</h2><div class="tablebox"><table class="t"><tr><th>${t('Ngày','Day')}</th><th>${t('Buổi và giờ','When')}</th><th>${t('Làm gì','What to do')}</th></tr>
@@ -399,7 +409,7 @@ function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luy�
 
 /* ============ ĐIỀU HƯỚNG + SỰ KIỆN ============ */
 const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents,'may-tinh':vSim};
-function render(){checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType()}
+function render(){if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType()}
 function go(h){const ch=view!==h;view=h;try{if(location.hash.slice(1)!==h)location.hash=h}catch(e){}render();if(ch)window.scrollTo(0,0)}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
 
@@ -411,6 +421,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(
  const it=W&&!W.done?W.items[W.i]:null,lock=!it||it.st.checked;
  switch(a){
  case 'sim':if(SIMA(b.dataset.k,v)===false)return;break;
+ case 'tkb':S.tkb=v;save();sfx('tap');break;
+ case 'focus':setFocus(!FOCUS);sfx('tap');render();window.scrollTo(0,0);return;
  case 'lw':{const f=LWA[b.dataset.w];if(f){f(v);sfx('tap');drawW(b.dataset.w)}return}
  case 'prof':setProfile(v);sfx('star');go('trang-chu');return;
  case 'profadd':addProfile();sfx('star');go('trang-chu');return;
@@ -452,6 +464,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(
  case 'reset':if(!resetArm){resetArm=true;break}{const keep={name:'',lang:S.lang,skin:S.skin,sfx:S.sfx,keys:S.keys,song:S.song,okSnd:S.okSnd};S=DB.profiles[DB.cur]=Object.assign(FRESH(),keep);save();W=null;resetArm=false;go('trang-chu')}return;
  default:return}
  render()});
+document.addEventListener('pointerdown',e=>{if(view!=='go-phim'||!e.target.closest)return;const b=e.target.closest('[data-tk]');if(!b)return;e.preventDefault();const c=b.dataset.tk;lastKey=Date.now();keySnd(c===' '?'space':'key',c);typeChar(c)});
+const fsCh=()=>{const on=!!(document.fullscreenElement||document.webkitFullscreenElement);if(on)FSON=true;else if(FSON){FSON=false;if(FOCUS){FOCUS=false;render()}}};
+document.addEventListener('fullscreenchange',fsCh);document.addEventListener('webkitfullscreenchange',fsCh);
 document.addEventListener('input',e=>{if(e.target.id==='type-in')onType(e);
  if(e.target.id==='q-type'&&W&&!W.done){const it=W.items[W.i];if(it.q.k==='type'&&!it.st.checked){it.st.v=e.target.value;const b=document.querySelector('[data-act="check"]');if(b)b.disabled=!answered(it)}}
  if(e.target.classList.contains('lw-calc')){ls('calc',{v:[2,3,5],f:0}).v[+e.target.dataset.i]=parseFloat(e.target.value)||0;const o=document.getElementById('calc-out');if(o)o.textContent=calcOut()}

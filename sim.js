@@ -1,4 +1,4 @@
-/* Mây Học Tin: phòng mô phỏng "Khám phá bên trong máy tính".
+/* May Học Tin: phòng mô phỏng "Khám phá bên trong máy tính".
    Bốn chặng: Khám phá (chạm từng bộ phận) → Tìm hiểu (Mây kể chuyện) → Thực hành (kéo thả lắp máy) → Thử thách (câu đố).
    Nạp trước app.js; mọi hàm chỉ chạy sau khi app.js đã sẵn sàng. Hình vẽ bằng SVG, không cần tệp ảnh. */
 
@@ -249,8 +249,8 @@ function smQuiz(){const q=SIM.q,m=SM();
 const SM_ICON='<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>';
 function vSim(){const m=SM(),st=simStars();
  const steps=[['explore','Khám phá','Explore',m.seen.length>=PARTS.length],['learn','Tìm hiểu','Learn',m.tour],['build','Thực hành','Build',m.build>0],['quiz','Thử thách','Challenge',(m.quiz||0)>=50]];
- return `<div class="stack sm"><a class="back" href="#trang-chu">← ${t('Về danh sách chủ đề','Back to all topics')}</a>
- <section class="card sm-top"><span class="icb" style="background:var(--blue)">${ic(SM_ICON)}</span><div class="sm-ttl"><div class="muted">${t('Phòng mô phỏng','Simulation lab')}</div><h1>${t('Khám phá bên trong máy tính','Explore inside the computer')}</h1></div><span class="stat"><b>★ ${st}</b>/8 ${t('sao','stars')}</span></section>
+ return `<div class="stack sm"><a class="back nofocus" href="#trang-chu">← ${t('Về danh sách chủ đề','Back to all topics')}</a>
+ <section class="card sm-top"><span class="icb" style="background:var(--blue)">${ic(SM_ICON)}</span><div class="sm-ttl"><div class="muted">${t('Phòng mô phỏng','Simulation lab')}</div><h1>${t('Khám phá bên trong máy tính','Explore inside the computer')}</h1></div><span class="stat"><b>★ ${st}</b>/8 ${t('sao','stars')}</span>${focusBtn()}</section>
  <div class="sm-steps" role="group" aria-label="${t('Bốn chặng','Four stages')}">${steps.map((s,i)=>`<button class="${SIM.mode===s[0]?'on':''}${s[3]?' done':''}" data-act="sim" data-k="mode" data-v="${s[0]}" ${SIM.mode===s[0]?'aria-current="step"':''}><i>${s[3]?'✓':i+1}</i><span>${t(s[1],s[2])}</span></button>`).join('')}</div>
  ${({explore:smExplore,learn:smLearn,build:smBuild,quiz:smQuiz}[SIM.mode]||smExplore)()}</div>`}
 /* thẻ mời trên trang chủ và trong chủ đề Máy tính */
