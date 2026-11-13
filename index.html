@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mây Học Tin</title>
+<title>May Học Tin</title>
 <meta name="description" content="Học Tin học và luyện thi IC3 Spark miễn phí cho học sinh tiểu học.">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#d9eeff">
@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Mây Học Tin">
+<meta name="apple-mobile-web-app-title" content="May Học Tin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -308,6 +308,35 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 .lvbar button.on{border-color:var(--blue);background:var(--blue);color:var(--on);box-shadow:0 4px 0 var(--blue-d)}
 .lvbar button.on span{color:var(--on);opacity:.9}
 @media (max-width:520px){.lvbar button{padding:6px 8px}.lvbar button b{font-size:15px}.lvbar button span{font-size:11px}}
+/* Bàn phím chạm trên màn hình (Gõ phím) */
+.tkb{display:flex;flex-direction:column;gap:6px;width:min(100%,940px);margin:0 auto;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.tkr{display:flex;gap:5px;justify-content:center}
+.tkr1{padding:0 5%}.tkr2{padding:0 15%}
+.tkb .key{display:flex;flex-direction:column;align-items:center;justify-content:center;height:max(40px,min(clamp(46px,12.500vw,70px),14vh));font-size:clamp(18px,4.600vw,26px);font-weight:700;border-radius:10px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.tkb .key.sp{flex:0 1 64%;text-transform:none;font-size:14px}
+.tkb .key.bump::after{content:"";width:12px;height:3px;border-radius:2px;background:currentColor;opacity:.55;margin-top:-2px}
+.tg-kb .tkb .key.next{transform:translateY(-2px) scale(1.06);box-shadow:0 0 0 4px var(--sun)}
+.tg-mode{gap:8px 12px}
+.focusbtn span{display:inline!important}
+/* Chế độ toàn màn hình cho Gõ phím và Phòng mô phỏng */
+body.focus header.top,body.focus #tabbar,body.focus footer,body.focus #panel,body.focus .nofocus{display:none!important}
+body.focus{padding-bottom:0}
+body.focus main{padding:8px 0 16px}
+body.focus .wrap{max-width:1100px;padding:0 8px}
+body.focus .tgcard{padding:10px 12px}
+body.focus .tgcard,body.focus #type-zone{gap:8px}
+body.focus .tgcard h2{font-size:clamp(17px,4.400vw,24px)}
+body.focus .tg-scene{height:clamp(104px,24vh,250px)}
+body.focus .tg-may{width:clamp(48px,11vh,86px);top:2px}
+body.focus .tg-line{top:auto;bottom:8px;line-height:1.35}
+body.focus .stats{gap:6px}
+body.focus .stats .stat{padding:3px 10px;font-size:13px}
+body.focus .stats .stat b{font-size:18px}
+body.focus .tg-tip{font-size:15px}
+body.focus .sm-top{padding:10px 14px}
+body.focus .sm-top h1{font-size:clamp(18px,4vw,26px)}
+body.focus .sm-top .icb,body.focus .sm-ttl .muted{display:none}
+@media (max-height:480px){body.focus .tg-tip,body.focus .stats{display:none}body.focus .tg-scene{height:92px}body.focus .tg-mode{display:none}}
 /* Phòng mô phỏng máy tính (sim.js) */
 .sm-top{display:flex;gap:12px 14px;align-items:center;flex-wrap:wrap}
 .sm-ttl{flex:1 1 240px}

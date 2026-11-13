@@ -1,4 +1,4 @@
-MÂY HỌC TIN - bản PWA
+MAY HỌC TIN - bản PWA
 
 Thư mục này là toàn bộ trang web. Tải cả thư mục lên Cloudflare (Workers & Pages) là chạy được, không cần lệnh build.
 
@@ -8,7 +8,7 @@ Các tệp:
   manifest.webmanifest, icons/         thông tin cài đặt và biểu tượng
   sw.js                                lưu sẵn trang để học khi mất mạng
 
-Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v8'  trong sw.js thành v9, v10... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
+Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v9'  trong sw.js thành v10, v11... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
 
 Cài lên điện thoại:
   Android (Chrome): mở trang, bấm menu ba chấm, chọn "Cài đặt ứng dụng" hoặc "Thêm vào màn hình chính".
