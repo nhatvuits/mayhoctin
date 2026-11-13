@@ -53,7 +53,7 @@ const tstate=(id,lv)=>{const k=bk(id,lv);return S.read[k]&&(S.best[k]||0)>=70?'d
 const tpct=(id,lv)=>{const k=bk(id,lv);return Math.round((S.read[k]?40:0)+Math.min(S.best[k]||0,70)/70*60)};
 const doneN=lv=>TOPICS.filter(x=>tstate(x.id,lv)==='done').length;
 function levelBar(){return `<div class="lvbar" role="group" aria-label="${t('Cấp độ','Level')}">${LEVELS.map(l=>`<button class="${lvOf()===l[0]?'on':''}" data-act="level" data-v="${l[0]}"><b>${t('Cấp độ','Level')} ${l[0]}</b><span>${t(l[1],l[2])} · ${doneN(l[0])}/${TOPICS.length}</span></button>`).join('')}</div>`}
-const BI={book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>',star:'<path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6L3.2 9.4l6.1-.8z"/>',trophy:'<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 20h8"/>',flame:'<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/>',keys:'<rect x="3" y="7" width="18" height="11" rx="2"/><path d="M7 11h.01M11 11h.01M15 11h.01M8 15h8"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',flag:'<path d="M5 21V4h11l-2 4 2 4H5"/>'};
+const BI={book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>',star:'<path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6L3.2 9.4l6.1-.8z"/>',trophy:'<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 20h8"/>',flame:'<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/>',keys:'<rect x="3" y="7" width="18" height="11" rx="2"/><path d="M7 11h.01M11 11h.01M15 11h.01M8 15h8"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',flag:'<path d="M5 21V4h11l-2 4 2 4H5"/>',chip:'<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>'};
 const BADGES=[
 ['first','Bước đầu tiên','First step','Đọc xong 1 bài học','Read 1 lesson','book',()=>Object.keys(S.read).length>=1],
 ['reader','Mọt sách','Bookworm','Đọc bài của mọi chủ đề','Read the lessons of every topic','book',()=>TOPICS.every(x=>S.read[bk(x.id,1)])],
@@ -67,7 +67,9 @@ const BADGES=[
 ['e800','Vượt mốc 800','Over 800','Thi thử đạt từ 800 điểm','Score 800 or more in an exam','trophy',()=>S.exams.some(e=>e.score>=800)],
 ['type','Tay gõ nhanh','Quick fingers','Gõ đạt 100 ký tự/phút','Type 100 keys per minute','keys',()=>Object.values(S.typing).some(v=>v>=100)],
 ['d3','Chăm chỉ 3 ngày','3-day habit','Học 3 ngày liên tục','Study 3 days in a row','flame',()=>(S.maxStreak||0)>=3],
-['d7','Chăm chỉ 7 ngày','7-day habit','Học 7 ngày liên tục','Study 7 days in a row','flame',()=>(S.maxStreak||0)>=7]];
+['d7','Chăm chỉ 7 ngày','7-day habit','Học 7 ngày liên tục','Study 7 days in a row','flame',()=>(S.maxStreak||0)>=7],
+['builder','Kỹ sư lắp máy','Computer builder','Lắp xong máy tính trong phòng mô phỏng','Build the computer in the simulation lab','chip',()=>!!(S.sim&&S.sim.build>0)],
+['pcpro','Chuyên gia máy tính','Computer expert','Đạt đủ 8 sao trong phòng mô phỏng','Get all 8 stars in the simulation lab','chip',()=>!!S.sim&&simStars()>=8]];
 function toast(msg){try{const d=document.createElement('div');d.className='toast';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),4200)}catch(e){}}
 function checkBadges(){if(!S.done)S.done={};if(S.doneDate&&!S.done[1])S.done[1]=S.doneDate;[1,2,3].forEach(l=>{if(doneN(l)>=TOPICS.length&&!S.done[l]){S.done[l]=new Date().toLocaleDateString('vi-VN');save()}});
  const nw=BADGES.filter(b=>b[6]()&&!S.badges.includes(b[0]));if(!nw.length)return;S.badges=S.badges.concat(nw.map(b=>b[0]));save();toast(t('Huy hiệu mới: ','New badge: ')+nw.map(b=>t(b[1],b[2])).join(', '));sfx('star');confetti()}
@@ -204,7 +206,7 @@ const qOf=(id,lv)=>{lv=lv||lvOf();return Q.filter(q=>q.t===id&&(q.lv||1)===lv)};
 const NAV=[['trang-chu','Bài học','Lessons','<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>'],['thi-thu','Thi thử','Practice exam','<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10l2 2 4-4M9 16h6"/>','Exam'],['go-phim','Gõ phím','Typing','<rect x="3" y="7" width="18" height="11" rx="2"/><path d="M7 11h.01M11 11h.01M15 11h.01M8 15h8"/>'],['tu-dien','Từ điển','Dictionary','<path d="M12 6c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V5c-3-1-6-1-8 1zM12 6v13"/>','Words'],['phu-huynh','Phụ huynh','Parents','<circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.2"/><path d="M3 20c0-3.5 2.5-6 6-6s6 2.5 6 6M15 20c0-2 .8-4.5 3-4.5 1.800 0 3 1.500 3 4.500"/>']];
 
 function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=='sky')document.body.dataset.skin=S.skin;else delete document.body.dataset.skin;
- const on=n=>n===view||(n==='trang-chu'&&(view.startsWith('hoc-')||(view==='lam-bai'&&W&&W.mode!=='exam')))||(n==='thi-thu'&&view==='lam-bai'&&W&&W.mode==='exam')||(n==='phu-huynh'&&view==='giay-khen');
+ const on=n=>n===view||(n==='trang-chu'&&(view.startsWith('hoc-')||view==='may-tinh'||(view==='lam-bai'&&W&&W.mode!=='exam')))||(n==='thi-thu'&&view==='lam-bai'&&W&&W.mode==='exam')||(n==='phu-huynh'&&view==='giay-khen');
  document.getElementById('head').innerHTML=`<a class="logo" href="#trang-chu"><svg viewBox="0 0 100 70" aria-hidden="true"><path d="M26 60a17 17 0 0 1-2-34 24 24 0 0 1 46-4 19 19 0 0 1 6 38z" fill="#fff" stroke="#12305a" stroke-width="3"/><circle cx="40" cy="40" r="3.5" fill="#12305a"/><circle cx="60" cy="40" r="3.5" fill="#12305a"/><path d="M43 49q7 6 14 0" fill="none" stroke="#12305a" stroke-width="3" stroke-linecap="round"/></svg><span>Mây Học Tin</span></a>
  <nav class="topnav" aria-label="${t('Mục chính','Main sections')}">${NAV.map(n=>`<a href="#${n[0]}" ${on(n[0])?'aria-current="page"':''}>${t(n[1],n[2])}</a>`).join('')}</nav>
  <div class="tools"><div class="seg" role="group" aria-label="${t('Ngôn ngữ','Language')}"><button class="${en()?'':'on'}" data-act="lang" data-v="vi"><span class="full">Tiếng Việt</span><span class="short">VI</span></button><button class="${en()?'on':''}" data-act="lang" data-v="en"><span class="full">English</span><span class="short">EN</span></button></div>
@@ -241,6 +243,7 @@ function vHome(){const total=TOPICS.reduce((s,x)=>s+starN(S.best[bk(x.id)]||0),0
  ${levelBar()}${lvOf()>1&&doneN(lvOf()-1)<TOPICS.length?`<p class="muted" style="flex:1 1 100%">${t(`Em nên hoàn thành Cấp độ ${lvOf()-1} trước khi học cấp độ này.`,`It is best to finish Level ${lvOf()-1} before this one.`)}</p>`:''}
  <div class="mission"><div class="qtype">${t('Nhiệm vụ tiếp theo','Next mission')}</div><p class="mtxt">${m.txt}</p><div class="bar"><i style="width:${m.pct}%"></i></div><div class="row">${m.btn}${S.wrong.length?`<button class="btn sun" data-act="review">${t(`Ôn ${S.wrong.length} câu em làm sai`,`Fix ${S.wrong.length} mistakes`)}</button>`:''}</div></div>
  </section>
+ ${simPromo()}
  <div><h2>${t(`Hành trình ${TOPICS.length} chủ đề · Cấp độ ${lvOf()}`,`Your ${TOPICS.length}-topic journey · Level ${lvOf()}`)}</h2><p class="muted">${t('Chủ đề nào cũng mở sẵn. Em học theo thứ tự hoặc chọn chủ đề mình còn yếu.','Every topic is open. Follow the order or jump to one you find hard.')}</p></div>
  <div class="grid">${TOPICS.map((x0,i)=>{const x=tp(x0),b=S.best[bk(x.id)];return `<a class="tcard" style="--tc:${x.c}" href="#hoc-${x.id}"><div class="hd"><span class="icb">${ic(x.icon)}</span><div><div class="n">${t('Chủ đề','Topic')} ${i+1} · ${Lof(x).length} ${t('bài','lessons')} · ${qOf(x.id).length} ${t('câu','questions')}</div><h3>${x.name}</h3></div></div><p>${x.sub}</p><div class="tbar"><i style="width:${tpct(x.id)}%"></i></div><div class="ft">${pill(x.id)}<span class="row" style="gap:8px">${b!=null?`<span class="tnum">${b}%</span>`:''}${starsH(starN(b||0))}</span></div></a>`}).join('')}</div>
  <section class="card stack"><div class="row" style="justify-content:space-between"><div><h2>${t('Huy hiệu của em','Your badges')}</h2><p class="muted">${t(`Em đã có ${S.badges.length}/${BADGES.length} huy hiệu.`,`You have ${S.badges.length} of ${BADGES.length} badges.`)}</p></div><a class="btn" href="#giay-khen">${t('Giấy khen của em','Your certificate')}</a></div>
@@ -254,7 +257,7 @@ function vTopic(id){const x=T(id);if(!x)return vHome();const i=TOPICS.findIndex(
  const none=()=>'',nx=TOPICS[i+1]&&tp(TOPICS[i+1]);
  return `<div class="stack" style="--tc:${x.c}"><a class="back" href="#trang-chu">← ${t('Về danh sách chủ đề','Back to all topics')}</a>
  <section class="card"><div class="row"><span class="icb" style="background:${x.c}">${ic(x.icon)}</span><div><div class="muted">${t('Chủ đề','Topic')} ${i+1}</div><h1>${x.name}</h1></div></div></section>
- ${levelBar()}
+ ${levelBar()}${id==='mt'?simPromo():''}
  ${Lof(x).map((l,k)=>`<section class="card lesson"><div class="no">${t('Bài','Lesson')} ${k+1}</div><h2>${l[0]}</h2>${l[1]}${l[2]==='word'?wordUI(none,true):l[2]==='excel'?excelUI(none,true):''}${lvOf()===1?lwFrame(id,k):''}</section>`).join('')}
  <div class="tip"><h3>${t('Mẹo của Mây','Mây’s tip')}</h3><p>${x.tip}</p></div>
  <section class="card"><div class="row" style="justify-content:space-between"><div><h3>${t('Em đọc xong rồi chứ?','Finished reading?')}</h3><p class="muted">${t(`${qOf(id).length} câu hỏi, có giải thích sau mỗi câu. Đúng từ 90% được 3 sao.`,`${qOf(id).length} questions with an explanation after each one. Score 90% or more for 3 stars.`)}</p></div><button class="btn primary" data-act="practice" data-v="${id}">${t('Luyện tập chủ đề này','Practise this topic')}</button></div></section>
@@ -395,7 +398,7 @@ function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luy�
  <section class="card stack"><h2>${t('Xoá tiến độ','Reset progress')}</h2><p class="muted">${t('Dùng khi một bạn khác bắt đầu học trên máy này. Màu, âm thanh và ngôn ngữ được giữ nguyên.','Use this when another child starts on this device. Colours, sounds and language are kept.')}</p><div class="row"><button class="btn" data-act="reset">${resetArm?t('Bấm lần nữa để xoá toàn bộ tiến độ','Click again to erase all progress'):t('Xoá tiến độ và học lại từ đầu','Erase progress and start over')}</button></div></section></div>`}
 
 /* ============ ĐIỀU HƯỚNG + SỰ KIỆN ============ */
-const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents};
+const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents,'may-tinh':vSim};
 function render(){checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType()}
 function go(h){const ch=view!==h;view=h;try{if(location.hash.slice(1)!==h)location.hash=h}catch(e){}render();if(ch)window.scrollTo(0,0)}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
@@ -407,6 +410,7 @@ document.addEventListener('keydown',e=>{if(view!=='go-phim'||e.ctrlKey||e.metaKe
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,v=b.dataset.v;
  const it=W&&!W.done?W.items[W.i]:null,lock=!it||it.st.checked;
  switch(a){
+ case 'sim':if(SIMA(b.dataset.k,v)===false)return;break;
  case 'lw':{const f=LWA[b.dataset.w];if(f){f(v);sfx('tap');drawW(b.dataset.w)}return}
  case 'prof':setProfile(v);sfx('star');go('trang-chu');return;
  case 'profadd':addProfile();sfx('star');go('trang-chu');return;
