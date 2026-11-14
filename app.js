@@ -228,6 +228,7 @@ function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=
  document.getElementById('head').innerHTML=`<a class="logo" href="#trang-chu"><svg viewBox="0 0 100 70" aria-hidden="true"><path d="M26 60a17 17 0 0 1-2-34 24 24 0 0 1 46-4 19 19 0 0 1 6 38z" fill="#fff" stroke="#12305a" stroke-width="3"/><circle cx="40" cy="40" r="3.5" fill="#12305a"/><circle cx="60" cy="40" r="3.5" fill="#12305a"/><path d="M43 49q7 6 14 0" fill="none" stroke="#12305a" stroke-width="3" stroke-linecap="round"/></svg><span>May Học Tin</span></a>
  <nav class="topnav" aria-label="${t('Mục chính','Main sections')}">${NAV.map(n=>`<a href="#${n[0]}" ${on(n[0])?'aria-current="page"':''}>${t(n[1],n[2])}</a>`).join('')}</nav>
  <div class="tools"><div class="seg" role="group" aria-label="${t('Ngôn ngữ','Language')}"><button class="${en()?'':'on'}" data-act="lang" data-v="vi"><span class="full">Tiếng Việt</span><span class="short">VI</span></button><button class="${en()?'on':''}" data-act="lang" data-v="en"><span class="full">English</span><span class="short">EN</span></button></div>
+ <button class="toolbtn fb-top" data-act="fb" data-k="open">${ic(FB_ICON)}<span>${t('Góp ý','Feedback')}</span></button>
  <a class="toolbtn ${view==='huong-dan'?'on':''}" href="#huong-dan" aria-label="${t('Hướng dẫn sử dụng','How to use this site')}">${ic(HELP_ICON)}<span>${t('Hướng dẫn','Guide')}</span></a>
  <button class="toolbtn ${panelOpen?'on':''}" data-act="panel" aria-expanded="${panelOpen}">${ic('<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1.2"/><circle cx="12" cy="7.5" r="1.2"/><circle cx="15.5" cy="10" r="1.2"/><path d="M12 21c-1.5 0-2-1.2-1.3-2.4.7-1.2 2.3-1.1 3.8-1.1"/>')}<span>${t('Hồ sơ, màu, âm thanh','Profile, colours, sounds')}</span></button></div>`;
  document.getElementById('panel').innerHTML=panelOpen?`<section class="card stack panel">
@@ -243,7 +244,7 @@ function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=
   <label class="lbl" for="try-in">${t('Gõ thử vào đây để nghe','Type here to hear it')}</label><input id="try-in" class="field" autocomplete="off" placeholder="${t('Gõ gì cũng được','Type anything')}">
  </section>`:'';
  document.getElementById('tabbar').innerHTML=NAV.map(n=>`<a href="#${n[0]}" ${on(n[0])?'aria-current="page"':''}>${ic(n[3])}<span>${t(n[1],n[4]||n[2])}</span></a>`).join('');
- document.getElementById('foot').innerHTML=t('May Học Tin là trang luyện tập miễn phí. Câu hỏi do trang tự biên soạn theo các chủ đề của IC3 Spark và chương trình Tin học tiểu học, không phải đề thi chính thức.','May Học Tin is a free practice site. Its questions are written by the site around the IC3 Spark topics and the Vietnamese primary informatics curriculum. They are not official exam questions.')+` <a href="#huong-dan">${t('Hướng dẫn sử dụng','How to use this site')}</a>`}
+ document.getElementById('foot').innerHTML=t('May Học Tin là trang luyện tập miễn phí. Câu hỏi do trang tự biên soạn theo các chủ đề của IC3 Spark và chương trình Tin học tiểu học, không phải đề thi chính thức.','May Học Tin is a free practice site. Its questions are written by the site around the IC3 Spark topics and the Vietnamese primary informatics curriculum. They are not official exam questions.')+` <a href="#huong-dan">${t('Hướng dẫn sử dụng','How to use this site')}</a> · <button class="linkbtn" data-act="fb" data-k="open">${t('Góp ý','Feedback')}</button>`}
 
 function mission(){const x=TOPICS.find(y=>tstate(y.id)!=='done');
  if(!x)return {txt:t('Em đã hoàn thành mọi chủ đề. Giờ thì thi thử nhé!','Every topic is done. Time for a practice exam!'),pct:100,btn:`<a class="btn primary" href="#thi-thu">${t('Vào phòng thi thử','Go to the exam room')} →</a>`};
@@ -270,6 +271,7 @@ function vHome(){const total=TOPICS.reduce((s,x)=>s+starN(S.best[bk(x.id)]||0),0
  <div class="badges">${BADGES.map(b=>{const got=S.badges.includes(b[0]);return `<div class="badge ${got?'got':''}"><span class="bi">${ic(BI[b[5]])}</span><b>${t(b[1],b[2])}</b><small>${got?t('Đã đạt','Earned'):t(b[3],b[4])}</small></div>`}).join('')}</div></section>
  <section class="card"><div class="row" style="justify-content:space-between"><div><h3>${t('Thi thử như thi thật','A practice exam like the real one')}</h3><p class="muted">${t('Ba cấp độ: 31, 36 và 42 câu trong 50 phút, đủ các dạng câu hỏi, có chấm điểm theo từng chủ đề.','Three levels: 31, 36 and 42 questions in 50 minutes, every question type, with a score for each topic.')}</p></div><a class="btn" href="#thi-thu">${t('Xem phòng thi thử','Open the exam room')}</a></div></section>
  <section class="card pstrip"><div class="row" style="justify-content:space-between"><div><h3>${t('Góc phụ huynh','Parents’ corner')}</h3><p class="muted">${t(`Đã hoàn thành ${dn}/${TOPICS.length} chủ đề, còn ${S.wrong.length} câu đang sai, điểm thi thử gần nhất: ${ex?ex.score+'/1000':'chưa thi'}.`,`${dn} of ${TOPICS.length} topics done, ${S.wrong.length} questions still missed, latest exam score: ${ex?ex.score+'/1000':'none yet'}.`)}</p></div><a class="btn" href="#phu-huynh">${t('Xem báo cáo và lịch học','See the report and timetable')}</a></div></section>
+ ${fbBoardH()}
  </div>`}
 
 function vTopic(id){const x=T(id);if(!x)return vHome();const i=TOPICS.findIndex(y=>y.id===id);
@@ -430,7 +432,7 @@ function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luy�
 /* ============ ĐIỀU HƯỚNG + SỰ KIỆN ============ */
 const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents,'may-tinh':vSim,'huong-dan':vHelp};
 let LASTV=null;
-function render(){if(view!==LASTV){if(LASTV!==null)sfx('page');LASTV=view}if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType();voxAuto()}
+function render(){if(view!==LASTV){if(LASTV!==null)sfx('page');LASTV=view}if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType();fbAfter();voxAuto()}
 function go(h){const ch=view!==h;view=h;try{if(location.hash.slice(1)!==h)location.hash=h}catch(e){}render();if(ch)window.scrollTo(0,0)}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
 
@@ -442,6 +444,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(
  const it=W&&!W.done?W.items[W.i]:null,lock=!it||it.st.checked;
  switch(a){
  case 'sim':if(SIMA(b.dataset.k,v)===false)return;break;
+ case 'fb':if(fbAct(b.dataset.k,v))render();return;
  case 'read':voxToggle(b);return;
  case 'helptab':case 'helpx':helpAct(b.dataset.act,v);break;
  case 'helpgo':helpAct('helpgo',v);panelOpen=false;go('huong-dan');return;
