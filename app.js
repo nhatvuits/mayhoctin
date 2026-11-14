@@ -72,7 +72,7 @@ const BADGES=[
 ['pcpro','Chuyên gia máy tính','Computer expert','Đạt đủ 8 sao trong phòng mô phỏng','Get all 8 stars in the simulation lab','chip',()=>!!S.sim&&simStars()>=8]];
 function toast(msg){try{const d=document.createElement('div');d.className='toast';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),4200)}catch(e){}}
 function checkBadges(){if(!S.done)S.done={};if(S.doneDate&&!S.done[1])S.done[1]=S.doneDate;[1,2,3].forEach(l=>{if(doneN(l)>=TOPICS.length&&!S.done[l]){S.done[l]=new Date().toLocaleDateString('vi-VN');save()}});
- const nw=BADGES.filter(b=>b[6]()&&!S.badges.includes(b[0]));if(!nw.length)return;S.badges=S.badges.concat(nw.map(b=>b[0]));save();toast(t('Huy hiệu mới: ','New badge: ')+nw.map(b=>t(b[1],b[2])).join(', '));sfx('star');confetti()}
+ const nw=BADGES.filter(b=>b[6]()&&!S.badges.includes(b[0]));if(!nw.length)return;S.badges=S.badges.concat(nw.map(b=>b[0]));save();toast(t('Huy hiệu mới: ','New badge: ')+nw.map(b=>t(b[1],b[2])).join(', '));sfx('badge');confetti()}
 /* nội dung theo ngôn ngữ */
 function tp(x){const e=en()&&EN_T[x.id];if(!e)return x;const o=Object.assign({},x,{name:e.name,sub:e.sub,tip:e.tip,L:x.L.map((l,i)=>[e.L[i][0],e.L[i][1],l[2]])});if(e.L2)o.L2=e.L2;if(e.L3)o.L3=e.L3;return o}
 const T=id=>{const x=TOPICS.find(t=>t.id===id);return x&&tp(x)};
@@ -90,12 +90,30 @@ function tone(f,at,d,type,g,f2){const a=actx();if(!a)return;const t0=a.currentTi
  v.gain.setValueAtTime(.0001,t0);v.gain.exponentialRampToValueAtTime(g||.15,t0+.008);v.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(v);v.connect(a.destination);o.start(t0);o.stop(t0+d+.03)}
 function noise(at,d,ftype,freq,g){const a=actx();if(!a)return;if(!NB){NB=a.createBuffer(1,Math.floor(a.sampleRate*.2),a.sampleRate);const ch=NB.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=Math.random()*2-1}
  const t0=a.currentTime+at,s=a.createBufferSource(),f=a.createBiquadFilter(),v=a.createGain();s.buffer=NB;f.type=ftype;f.frequency.value=freq;v.gain.setValueAtTime(g,t0);v.gain.exponentialRampToValueAtTime(.0001,t0+d);s.connect(f);f.connect(v);v.connect(a.destination);s.start(t0);s.stop(t0+d+.02)}
-function sfx(n,k){if(n==='ok'&&k!=null)voxPraise('ok');else if(n==='bad')voxPraise('bad');else if(n==='win')voxPraise('win');if(!S.sfx)return;try{
+function sfx(n,k){if(n==='ok'&&k!=null)voxPraise('ok');else if(n==='bad')voxPraise('bad');else if(n==='win'||n==='big')voxPraise('win');if(!S.sfx)return;try{
  if(n==='ok'&&S.okSnd==='coin')coin();
  else if(n==='ok'){const up=Math.min(k||0,6)*40;tone(660+up,0,.12,'triangle',.16);tone(880+up,.09,.2,'triangle',.16)}
+ /* chuỗi đúng liên tiếp 3, 5, 10, 15... câu: thêm một tràng lấp lánh */
+ if(n==='ok'&&(k===3||k===5||(k>=10&&k%5===0)))[1047,1319,1568,2093].forEach((f,i)=>tone(f,.24+i*.06,.14,'sine',.08));
+ if(n==='ok')return;
  else if(n==='bad'){tone(230,0,.16,'sine',.12);tone(185,.13,.24,'sine',.1)}
  else if(n==='err')tone(160,0,.09,'square',.05);
- else if(n==='win')[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.1,.28,'triangle',.15));
+ else if(n==='win'||n==='big'){[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.1,.28,'triangle',.15));
+  /* hợp âm kết và tiếng lấp lánh; 'big' (điểm rất cao) thêm một tràng nốt bay lên */
+  [523,659,784,1047].forEach(f=>tone(f,.55,.7,'sine',.06));noise(.55,.2,'highpass',6000,.04);
+  if(n==='big'){[1319,1568,2093,2637].forEach((f,i)=>tone(f,.95+i*.07,.2,'sine',.07));noise(1.25,.2,'highpass',7000,.04)}}
+ else if(n==='badge'){[392,523,659].forEach(f=>tone(f,0,.22,'triangle',.09));[523,659,784,1047].forEach(f=>tone(f,.26,.6,'triangle',.09));noise(.26,.2,'highpass',6000,.03)}
+ else if(n==='combo')[1047,1319,1568,2093].forEach((f,i)=>tone(f,i*.06,.14,'sine',.07));
+ else if(n==='page'){noise(0,.1,'bandpass',900,.035);noise(.05,.12,'bandpass',1700,.03)}
+ else if(n==='pop')tone(420,0,.09,'sine',.13,880);
+ else if(n==='pick')tone(520,0,.07,'triangle',.08,780);
+ else if(n==='snap'){noise(0,.03,'highpass',3000,.16);tone(190,.01,.13,'sine',.2,90)}
+ else if(n==='plug'){noise(0,.025,'highpass',2500,.14);noise(.1,.03,'highpass',3500,.14);tone(330,.1,.08,'triangle',.06)}
+ else if(n==='door'){tone(140,0,.2,'sine',.2,70);noise(0,.05,'lowpass',500,.18);noise(.17,.03,'highpass',2500,.09)}
+ else if(n==='power'){const a=actx();tone(1175,0,.07,'square',.04);[262,330,392,523,659].forEach((f,i)=>tone(f,.2+i*.11,.55,'sine',.085));
+  /* tiếng quạt quay nhanh dần rồi êm lại */
+  if(a){if(!NB)noise(0,.01,'lowpass',100,.0001);const t0=a.currentTime+.1,sr=a.createBufferSource(),f=a.createBiquadFilter(),v=a.createGain();sr.buffer=NB;sr.loop=true;f.type='lowpass';f.frequency.setValueAtTime(200,t0);f.frequency.exponentialRampToValueAtTime(1100,t0+.9);
+   v.gain.setValueAtTime(.0001,t0);v.gain.exponentialRampToValueAtTime(.06,t0+.5);v.gain.exponentialRampToValueAtTime(.0001,t0+1.8);sr.connect(f);f.connect(v);v.connect(a.destination);sr.start(t0);sr.stop(t0+1.9)}}
  else if(n==='end'){tone(440,0,.2,'triangle',.12);tone(523,.16,.3,'triangle',.12)}
  else if(n==='tap')tone(540,0,.05,'sine',.05);
  else if(n==='flip')noise(0,.06,'highpass',2500,.12);
@@ -185,7 +203,7 @@ function finish(){W.done=true;W.confirm=false;clearInterval(tick);
  W.items.forEach(it=>{const id=it.q.id,i=S.wrong.indexOf(id);if(correct(it)){if(i>=0){S.wrong.splice(i,1);S.fixed=(S.fixed||0)+1}}else if(i<0)S.wrong.push(id)});touch();
  if(W.mode==='practice'&&W.topic){const k=bk(W.topic,W.lv||1);S.best[k]=Math.max(S.best[k]||0,W.pct)}
  if(W.mode==='exam'){S.exams.unshift({d:new Date().toLocaleDateString('vi-VN'),n,ok,score:Math.round(ok/n*1000),lv:W.lv||1});S.exams=S.exams.slice(0,10)}
- save();if(W.pct>=70){sfx('win');confetti()}else sfx('end')}
+ save();if(W.pct>=70){sfx(W.pct>=90?'big':'win');confetti()}else sfx('end')}
 
 function qHtml(it,reveal){const q=lq(it.q),st=it.st,L='ABCDEF';
  const lab=q.yn?t('Chọn Đúng hoặc Sai cho mỗi câu','Choose Yes or No for each statement'):{type:t('Gõ câu trả lời','Type your answer'),one:t('Chọn 1 đáp án','Choose 1 answer'),multi:t(`Chọn ${q.n} đáp án`,`Choose ${q.n} answers`),sort:t('Xếp mỗi mục vào đúng nhóm','Put each item in the right group'),order:t('Bấm các bước theo đúng thứ tự','Tap the steps in the right order'),spot:t('Bấm vào đúng chỗ trên hình','Click the right spot in the picture')}[q.k];
@@ -218,7 +236,7 @@ function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=
   <div class="swatches">${SKINS.map(s=>`<button class="sw ${(S.skin||'sky')===s[0]?'on':''}" data-act="skin" data-v="${s[0]}"><i style="background:${s[3]}"></i><span>${t(s[1],s[2])}</span></button>`).join('')}</div>
   ${voxPanel()}
   <h2>${t('Âm thanh','Sounds')}</h2>
-  <div class="row"><span class="lbl">${t('Âm thanh khen thưởng','Reward sounds')}</span><div class="seg"><button class="${S.sfx?'on':''}" data-act="sfx" data-v="1">${t('Bật','On')}</button><button class="${S.sfx?'':'on'}" data-act="sfx" data-v="0">${t('Tắt','Off')}</button></div></div>
+  <div class="row"><span class="lbl">${t('Hiệu ứng âm thanh','Sound effects')}</span><div class="seg"><button class="${S.sfx?'on':''}" data-act="sfx" data-v="1">${t('Bật','On')}</button><button class="${S.sfx?'':'on'}" data-act="sfx" data-v="0">${t('Tắt','Off')}</button></div></div>
   <div class="row"><span class="lbl">${t('Tiếng khi trả lời đúng','Sound for a right answer')}</span><div class="seg"><button class="${S.okSnd==='coin'?'':'on'}" data-act="oksnd" data-v="chime">${t('Chuông','Chime')}</button><button class="${S.okSnd==='coin'?'on':''}" data-act="oksnd" data-v="coin">${t('Đồng xu','Coin')}</button></div></div>
   <div><span class="lbl">${t('Tiếng bàn phím (keycap)','Keyboard sound (keycaps)')}</span><div class="chips" style="margin-top:8px">${KEYMODES.map(k=>`<button class="chip ${S.keys===k[0]?'sel':''}" data-act="keys" data-v="${k[0]}">${t(k[1],k[2])}</button>`).join('')}</div></div>
   ${S.keys==='song'?`<div><span class="lbl">${t('Chọn bài hát. Mỗi lần gõ phím là một nốt nhạc, gõ đều tay sẽ thành bài.','Pick a song. Every key you press plays the next note, so steady typing plays the tune.')}</span><div class="chips" style="margin-top:8px">${SONGS.map(s=>`<button class="chip ${S.song===s[0]?'sel':''}" data-act="song" data-v="${s[0]}">${t(s[1],s[2])}</button>`).join('')}</div><div class="row" style="margin-top:10px"><button class="btn" data-act="listen">${t('Nghe thử cả bài','Listen to the whole tune')}</button></div></div>`:''}
@@ -380,8 +398,8 @@ function typeChar(c){if(TY.done||!TY.text)return;if(!TY.t0)TY.t0=Date.now();cons
  if(c!==want){TY.err++;TY.combo=0;sfx('err');updType(true);return}
  TY.pos++;TY.combo++;TY.maxCombo=Math.max(TY.maxCombo,TY.combo);
  if(TY.pos>=TY.text.length){TY.done=true;const mins=(Date.now()-TY.t0)/60000;TY.cpm=Math.round(TY.text.length/Math.max(mins,.01));TY.acc=Math.round(TY.text.length/(TY.text.length+TY.err)*100);TY.stars=TY.acc>=97?3:TY.acc>=90?2:1;
-  if(!S.tstar)S.tstar={};S.tstar[TY.lv]=Math.max(S.tstar[TY.lv]||0,TY.stars);S.typing[TY.lv]=Math.max(S.typing[TY.lv]||0,TY.cpm);touch();checkBadges();sfx('win');confetti();render();return}
- if(want===' ')sfx('star');updType()}
+  if(!S.tstar)S.tstar={};S.tstar[TY.lv]=Math.max(S.tstar[TY.lv]||0,TY.stars);S.typing[TY.lv]=Math.max(S.typing[TY.lv]||0,TY.cpm);touch();checkBadges();sfx(TY.stars>=3?'big':'win');confetti();render();return}
+ if(want===' ')sfx('star');else if(TY.combo%10===0&&S.keys!=='song')sfx('combo');updType()}
 function onType(e){const el=e.target,v=el.value;el.value='';if(!v)return;const c=v[v.length-1].toLowerCase();if(Date.now()-lastKey>120)keySnd(c===' '?'space':'key',c);typeChar(c)}
 
 /* ---- từ điển ---- */
@@ -411,7 +429,8 @@ function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luy�
 
 /* ============ ĐIỀU HƯỚNG + SỰ KIỆN ============ */
 const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents,'may-tinh':vSim,'huong-dan':vHelp};
-function render(){if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType();voxAuto()}
+let LASTV=null;
+function render(){if(view!==LASTV){if(LASTV!==null)sfx('page');LASTV=view}if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType();voxAuto()}
 function go(h){const ch=view!==h;view=h;try{if(location.hash.slice(1)!==h)location.hash=h}catch(e){}render();if(ch)window.scrollTo(0,0)}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
 

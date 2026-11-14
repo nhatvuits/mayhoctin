@@ -189,7 +189,7 @@ function smLearn(){const n=SM_TOUR.length,i=Math.min(SIM.tour,n-1),st=SM_TOUR[i]
 function smNewBuild(){SIM.b={stage:1,done:[],sel:null,miss:0,msg:null,last:null,blink:null,on:false,stars:0,n:0,tray:shuffle(SM_IN)}}
 const smTodo=()=>{const b=SIM.b;return (b.stage===1?SM_IN:SM_OUT).filter(id=>!b.done.includes(id))};
 const smSlots=()=>{const b=SIM.b;return smTodo().filter(id=>!PM[id].need||b.done.includes(PM[id].need))};
-function smPlace(id){const b=SIM.b;b.done.push(id);b.sel=null;b.last=id;b.blink=null;b.n++;sfx('ok',b.n);const p=PM[id];
+function smPlace(id){const b=SIM.b;b.done.push(id);b.sel=null;b.last=id;b.blink=null;b.n++;sfx(SM_OUT.includes(id)?'plug':'snap');sfx('ok',b.n);const p=PM[id];
  b.msg=[`Đúng rồi! ${p.vi} đã vào đúng chỗ. ${p.like[0]}`,`That’s right! The ${smLo(id,1)} is in place. ${p.like[1]}`];touch()}
 function smTry(id,slot){const b=SIM.b,p=PM[id];if(!p||b.done.includes(id))return;b.last=null;
  if(p.need&&!b.done.includes(p.need)){b.msg=[`${p.vi} cắm lên bo mạch chủ. Em lắp bo mạch chủ trước nhé.`,`The ${smLo(id,1)} plugs into the motherboard. Fit the motherboard first.`];b.blink='mb';sfx('err');return}
@@ -264,14 +264,14 @@ function SIMA(k,v){const m=SM(),b=SIM.b,q=SIM.q;if(b)b.last=null;
  case 'view':SIM.view=v;if(v==='desk'&&SM_IN.includes(SIM.sel))SIM.sel=null;sfx('flip');return;
  case 'part':{if(!PM[v])return false;if(SIM.mode!=='explore')return false;
   if(v==='case'&&SIM.view==='desk')SIM.view='case';else if(SM_IN.includes(v))SIM.view='case';else if(SM_OUT.includes(v))SIM.view='desk';
-  SIM.sel=v;sfx('tap');if(!m.seen.includes(v)){m.seen.push(v);save();touch();if(m.seen.length===PARTS.length){sfx('win');confetti();toast(t('Em đã khám phá đủ 11 bộ phận! +1 sao','You explored all 11 parts! +1 star'))}else sfx('star')}return}
- case 'tour':SIM.tour=Math.max(0,Math.min(SM_TOUR.length-1,SIM.tour+ +v));sfx(SIM.tour>=8&&+v>0?'star':'tap');return;
+  SIM.sel=v;sfx('pop');if(!m.seen.includes(v)){m.seen.push(v);save();touch();if(m.seen.length===PARTS.length){sfx('win');confetti();toast(t('Em đã khám phá đủ 11 bộ phận! +1 sao','You explored all 11 parts! +1 star'))}else sfx('star')}return}
+ case 'tour':SIM.tour=Math.max(0,Math.min(SM_TOUR.length-1,SIM.tour+ +v));sfx(SIM.tour>=8&&+v>0?'star':'page');return;
  case 'tourend':if(!m.tour){m.tour=1;save();touch();sfx('win');toast(t('Em đã nghe hết câu chuyện của May! +1 sao','You finished May’s story! +1 star'))}SIM.mode='build';SIM.tour=0;try{window.scrollTo(0,0)}catch(e){}return;
- case 'pickp':if(!b||Date.now()-SIM.noClick<350)return false;b.sel=b.sel===v?null:v;b.blink=null;sfx('tap');return;
+ case 'pickp':if(!b||Date.now()-SIM.noClick<350)return false;b.sel=b.sel===v?null:v;b.blink=null;sfx('pick');return;
  case 'slot':if(!b)return false;if(!b.sel){b.msg=['Em chạm chọn một bộ phận ở khay linh kiện trước nhé.','Tap a part in the tray first.'];sfx('err');return}smTry(b.sel,v);smAfter();return;
  case 'hint':{if(!b)return false;const id=b.sel&&smSlots().includes(b.sel)?b.sel:(b.stage===1?SM_IN:SM_OUT).find(x=>!b.done.includes(x));if(!id)return false;b.blink=id;b.sel=id;b.msg=[`Tìm ${smLo(id,0)} nhé. ${PM[id].put[0]}`,`Look for the ${smLo(id,1)}. ${PM[id].put[1]}`];sfx('tap');return}
- case 'close':if(!b||smTodo().length)return false;b.stage=2;b.msg=null;b.sel=null;b.blink=null;b.tray=shuffle(SM_OUT);sfx('flip');return;
- case 'power':if(!b||b.stage!==3||b.on)return false;b.on=true;b.stars=b.miss===0?3:b.miss<=2?2:1;m.build=Math.max(m.build,b.stars);save();touch();sfx('win');confetti();return;
+ case 'close':if(!b||smTodo().length)return false;b.stage=2;b.msg=null;b.sel=null;b.blink=null;b.tray=shuffle(SM_OUT);sfx('door');return;
+ case 'power':if(!b||b.stage!==3||b.on)return false;b.on=true;b.stars=b.miss===0?3:b.miss<=2?2:1;m.build=Math.max(m.build,b.stars);save();touch();sfx('power');setTimeout(()=>{sfx(b.stars>=3?'big':'win');confetti()},1300);return;
  case 'rebuild':smNewBuild();sfx('tap');return;
  case 'qstart':smNewQuiz();sfx('tap');try{window.scrollTo(0,0)}catch(e){}return;
  case 'ans':{if(!q||q.done||q.pick!=null||!PM[v])return false;const it=q.items[q.i];q.pick=v;if(v===it.ans){q.ok++;q.run++;sfx('ok',q.run)}else{q.run=0;sfx('bad')}touch();return}
@@ -293,7 +293,7 @@ function smDrop(id,cx,cy){const el=document.getElementById('sm-svg'),b=SIM.b;if(
 if(typeof document!=='undefined'){
 document.addEventListener('pointerdown',e=>{if(typeof view==='undefined'||view!=='may-tinh'||!e.target.closest)return;const el=e.target.closest('[data-drag]');if(!el||e.button>0)return;SDG={id:el.dataset.drag,x:e.clientX,y:e.clientY,on:false,g:null,pid:e.pointerId}});
 document.addEventListener('pointermove',e=>{if(!SDG||e.pointerId!==SDG.pid)return;
- if(!SDG.on){if(Math.hypot(e.clientX-SDG.x,e.clientY-SDG.y)<8)return;SDG.on=true;const g=document.createElement('div');g.className='sm-ghost';g.innerHTML=smPic(SDG.id,{});document.body.appendChild(g);SDG.g=g;const st=document.querySelector('.sm-stage');if(st)st.classList.add('dragging');sfx('tap')}
+ if(!SDG.on){if(Math.hypot(e.clientX-SDG.x,e.clientY-SDG.y)<8)return;SDG.on=true;const g=document.createElement('div');g.className='sm-ghost';g.innerHTML=smPic(SDG.id,{});document.body.appendChild(g);SDG.g=g;const st=document.querySelector('.sm-stage');if(st)st.classList.add('dragging');sfx('pick')}
  SDG.g.style.left=e.clientX+'px';SDG.g.style.top=e.clientY+'px';e.preventDefault()},{passive:false});
 const smEnd=e=>{if(!SDG||e.pointerId!==SDG.pid)return;const d=SDG;SDG=null;if(d.g)d.g.remove();if(!d.on)return;SIM.noClick=Date.now();if(e.type==='pointerup'&&SIM.b){SIM.b.sel=null;smDrop(d.id,e.clientX,e.clientY);smAfter()}render()};
 document.addEventListener('pointerup',smEnd);document.addEventListener('pointercancel',smEnd);
