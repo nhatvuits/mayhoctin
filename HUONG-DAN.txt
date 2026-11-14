@@ -6,10 +6,11 @@ Các tệp:
   index.html, data.js, en.js, extra.js, app.js   trang và nội dung
   sim.js                               phòng mô phỏng "Khám phá bên trong máy tính"
   voice.js                             giọng đọc của May (nút Nghe, May tự đọc, lời khen)
+  help.js                              trang Hướng dẫn sử dụng cho bé và ba mẹ
   manifest.webmanifest, icons/         thông tin cài đặt và biểu tượng
   sw.js                                lưu sẵn trang để học khi mất mạng
 
-Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v12'  trong sw.js thành v13, v14... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
+Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v13'  trong sw.js thành v14, v15... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
 
 Cài lên điện thoại:
   Android (Chrome): mở trang, bấm menu ba chấm, chọn "Cài đặt ứng dụng" hoặc "Thêm vào màn hình chính".

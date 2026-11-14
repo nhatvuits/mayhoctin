@@ -78,12 +78,13 @@ function voxPraise(kind){if(!voxOn())return;const a=VOX_PRAISE[kind];if(!a)retur
 
 /* ---- phần cài đặt trong bảng "Hồ sơ, màu, âm thanh" ---- */
 function voxPanel(){const seg=(act,cur,opts)=>`<div class="seg">${opts.map(o=>`<button class="${cur===o[0]?'on':''}" data-act="${act}" data-v="${o[0]}">${t(o[1],o[2])}</button>`).join('')}</div>`;
- if(!voxApi()||!voxHas(voxLang()))return `<h2>${t('Giọng đọc của May','May’s reading voice')}</h2><p class="muted">${t('Máy này chưa có giọng đọc tiếng Việt nên May chưa đọc thành lời được. Phụ huynh có thể thêm giọng tiếng Việt trong phần Cài đặt của máy (mục Trợ năng hoặc Ngôn ngữ, phần Giọng nói), rồi mở lại trang.','This device has no reading voice for this language yet, so May cannot read aloud. A grown-up can add one in the device Settings (Accessibility or Language, under Speech), then reopen the page.')}</p>`;
+ if(!voxApi()||!voxHas(voxLang()))return `<h2>${t('Giọng đọc của May','May’s reading voice')}</h2><p class="muted">${t('Máy này chưa có giọng đọc tiếng Việt nên May chưa đọc thành lời được. Phụ huynh có thể thêm giọng tiếng Việt trong phần Cài đặt của máy (mục Trợ năng hoặc Ngôn ngữ, phần Giọng nói), rồi mở lại trang.','This device has no reading voice for this language yet, so May cannot read aloud. A grown-up can add one in the device Settings (Accessibility or Language, under Speech), then reopen the page.')}</p><div class="row">${helpLink('voice','Xem hướng dẫn thêm giọng đọc cho từng loại máy','See how to add a voice on each kind of device')}</div>`;
  const on=S.vox!==false,r=voxRate();
  return `<h2>${t('Giọng đọc của May','May’s reading voice')}</h2>
  <div class="row"><span class="lbl">${t('Nút Nghe và lời khen của May','Listen buttons and May’s praise')}</span>${seg('vox',on?'1':'0',[['1','Bật','On'],['0','Tắt','Off']])}</div>
  ${on?`<div class="row"><span class="lbl">${t('May tự đọc câu hỏi và lời hướng dẫn','May reads questions and guidance by herself')}</span>${seg('vauto',S.vauto?'1':'0',[['1','Bật','On'],['0','Tắt','Off']])}</div>
- <div class="row"><span class="lbl">${t('Tốc độ đọc','Reading speed')}</span>${seg('vrate',r<0.9?'0.8':r>1.05?'1.15':'0.95',[['0.8','Chậm','Slow'],['0.95','Vừa','Normal'],['1.15','Nhanh','Fast']])}<button class="btn" data-act="vtest">${t('Nghe thử','Try it')}</button></div>`:''}`}
+ <div class="row"><span class="lbl">${t('Tốc độ đọc','Reading speed')}</span>${seg('vrate',r<0.9?'0.8':r>1.05?'1.15':'0.95',[['0.8','Chậm','Slow'],['0.95','Vừa','Normal'],['1.15','Nhanh','Fast']])}<button class="btn" data-act="vtest">${t('Nghe thử','Try it')}</button></div>`:''}
+ <div class="row">${helpLink('voice','Không nghe thấy tiếng? Xem hướng dẫn','No sound? See the guide')}</div>`}
 function voxAct(a,v){switch(a){
  case 'vox':S.vox=v==='1';if(!S.vox)voxStop();save();return true;
  case 'vauto':S.vauto=v==='1';VOX.auto='';save();return true;

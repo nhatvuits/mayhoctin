@@ -308,6 +308,24 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 .lvbar button.on{border-color:var(--blue);background:var(--blue);color:var(--on);box-shadow:0 4px 0 var(--blue-d)}
 .lvbar button.on span{color:var(--on);opacity:.9}
 @media (max-width:520px){.lvbar button{padding:6px 8px}.lvbar button b{font-size:15px}.lvbar button span{font-size:11px}}
+/* Trang Hướng dẫn sử dụng (help.js) */
+.hp-tabs{align-self:flex-start}
+.hp{padding:0;overflow:hidden}
+.hp summary{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;list-style:none;font-family:var(--display);font-weight:700;font-size:clamp(18px,2.600vw,22px);line-height:1.25}
+.hp summary::-webkit-details-marker{display:none}
+.hp summary::before{content:"+";flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);font-size:22px;line-height:1}
+.hp[open] summary::before{content:"\2212";background:var(--blue);color:var(--on)}
+.hp[open] summary{border-bottom:2px solid var(--line)}
+.hp-body{padding:14px 20px 18px;display:flex;flex-direction:column;gap:10px}
+.hp-body>.rd{align-self:flex-end}
+.hp-h{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.hp-body ol{margin:0;padding-left:26px;display:flex;flex-direction:column;gap:10px;max-width:70ch}
+.hp-body li::marker{font-family:var(--display);font-weight:800;color:var(--blue)}
+.hp-note{margin-top:4px;padding:10px 14px}
+.hp-hint{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;border-color:var(--sun-d);background:var(--sun-soft)}
+.hp-hint .txt{flex:1 1 220px;display:flex;flex-direction:column}
+a.toolbtn{text-decoration:none}
+footer a{font-weight:700;color:var(--blue)}
 /* Giọng đọc của May (voice.js): nút Nghe */
 .rd{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 12px 4px 9px;border:2px solid var(--line);border-radius:999px;background:var(--cloud);color:var(--blue);font-weight:700;font-size:14px;line-height:1}
 .rd svg{width:20px;height:20px}
@@ -431,6 +449,7 @@ body.focus .sm-top .icb,body.focus .sm-ttl .muted{display:none}
 <script src="en.js"></script>
 <script src="extra.js"></script>
 <script src="voice.js"></script>
+<script src="help.js"></script>
 <script src="sim.js"></script>
 <script src="app.js"></script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>

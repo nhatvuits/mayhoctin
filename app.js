@@ -210,6 +210,7 @@ function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=
  document.getElementById('head').innerHTML=`<a class="logo" href="#trang-chu"><svg viewBox="0 0 100 70" aria-hidden="true"><path d="M26 60a17 17 0 0 1-2-34 24 24 0 0 1 46-4 19 19 0 0 1 6 38z" fill="#fff" stroke="#12305a" stroke-width="3"/><circle cx="40" cy="40" r="3.5" fill="#12305a"/><circle cx="60" cy="40" r="3.5" fill="#12305a"/><path d="M43 49q7 6 14 0" fill="none" stroke="#12305a" stroke-width="3" stroke-linecap="round"/></svg><span>May Học Tin</span></a>
  <nav class="topnav" aria-label="${t('Mục chính','Main sections')}">${NAV.map(n=>`<a href="#${n[0]}" ${on(n[0])?'aria-current="page"':''}>${t(n[1],n[2])}</a>`).join('')}</nav>
  <div class="tools"><div class="seg" role="group" aria-label="${t('Ngôn ngữ','Language')}"><button class="${en()?'':'on'}" data-act="lang" data-v="vi"><span class="full">Tiếng Việt</span><span class="short">VI</span></button><button class="${en()?'on':''}" data-act="lang" data-v="en"><span class="full">English</span><span class="short">EN</span></button></div>
+ <a class="toolbtn ${view==='huong-dan'?'on':''}" href="#huong-dan" aria-label="${t('Hướng dẫn sử dụng','How to use this site')}">${ic(HELP_ICON)}<span>${t('Hướng dẫn','Guide')}</span></a>
  <button class="toolbtn ${panelOpen?'on':''}" data-act="panel" aria-expanded="${panelOpen}">${ic('<circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1.2"/><circle cx="12" cy="7.5" r="1.2"/><circle cx="15.5" cy="10" r="1.2"/><path d="M12 21c-1.5 0-2-1.2-1.3-2.4.7-1.2 2.3-1.1 3.8-1.1"/>')}<span>${t('Hồ sơ, màu, âm thanh','Profile, colours, sounds')}</span></button></div>`;
  document.getElementById('panel').innerHTML=panelOpen?`<section class="card stack panel">
   <div class="row" style="justify-content:space-between"><h2>${t('Hồ sơ học tập','Learner profiles')}</h2><button class="btn" data-act="panel">${t('Xong','Done')}</button></div>${profH()}
@@ -224,7 +225,7 @@ function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=
   <label class="lbl" for="try-in">${t('Gõ thử vào đây để nghe','Type here to hear it')}</label><input id="try-in" class="field" autocomplete="off" placeholder="${t('Gõ gì cũng được','Type anything')}">
  </section>`:'';
  document.getElementById('tabbar').innerHTML=NAV.map(n=>`<a href="#${n[0]}" ${on(n[0])?'aria-current="page"':''}>${ic(n[3])}<span>${t(n[1],n[4]||n[2])}</span></a>`).join('');
- document.getElementById('foot').textContent=t('May Học Tin là trang luyện tập miễn phí. Câu hỏi do trang tự biên soạn theo các chủ đề của IC3 Spark và chương trình Tin học tiểu học, không phải đề thi chính thức.','May Học Tin is a free practice site. Its questions are written by the site around the IC3 Spark topics and the Vietnamese primary informatics curriculum. They are not official exam questions.')}
+ document.getElementById('foot').innerHTML=t('May Học Tin là trang luyện tập miễn phí. Câu hỏi do trang tự biên soạn theo các chủ đề của IC3 Spark và chương trình Tin học tiểu học, không phải đề thi chính thức.','May Học Tin is a free practice site. Its questions are written by the site around the IC3 Spark topics and the Vietnamese primary informatics curriculum. They are not official exam questions.')+` <a href="#huong-dan">${t('Hướng dẫn sử dụng','How to use this site')}</a>`}
 
 function mission(){const x=TOPICS.find(y=>tstate(y.id)!=='done');
  if(!x)return {txt:t('Em đã hoàn thành mọi chủ đề. Giờ thì thi thử nhé!','Every topic is done. Time for a practice exam!'),pct:100,btn:`<a class="btn primary" href="#thi-thu">${t('Vào phòng thi thử','Go to the exam room')} →</a>`};
@@ -244,7 +245,7 @@ function vHome(){const total=TOPICS.reduce((s,x)=>s+starN(S.best[bk(x.id)]||0),0
  ${levelBar()}${lvOf()>1&&doneN(lvOf()-1)<TOPICS.length?`<p class="muted" style="flex:1 1 100%">${t(`Em nên hoàn thành Cấp độ ${lvOf()-1} trước khi học cấp độ này.`,`It is best to finish Level ${lvOf()-1} before this one.`)}</p>`:''}
  <div class="mission"><div class="qtype">${t('Nhiệm vụ tiếp theo','Next mission')}</div><p class="mtxt">${m.txt}</p><div class="bar"><i style="width:${m.pct}%"></i></div><div class="row">${m.btn}${S.wrong.length?`<button class="btn sun" data-act="review">${t(`Ôn ${S.wrong.length} câu em làm sai`,`Fix ${S.wrong.length} mistakes`)}</button>`:''}</div></div>
  </section>
- ${simPromo()}
+ ${helpHint()}${simPromo()}
  <div><h2>${t(`Hành trình ${TOPICS.length} chủ đề · Cấp độ ${lvOf()}`,`Your ${TOPICS.length}-topic journey · Level ${lvOf()}`)}</h2><p class="muted">${t('Chủ đề nào cũng mở sẵn. Em học theo thứ tự hoặc chọn chủ đề mình còn yếu.','Every topic is open. Follow the order or jump to one you find hard.')}</p></div>
  <div class="grid">${TOPICS.map((x0,i)=>{const x=tp(x0),b=S.best[bk(x.id)];return `<a class="tcard" style="--tc:${x.c}" href="#hoc-${x.id}"><div class="hd"><span class="icb">${ic(x.icon)}</span><div><div class="n">${t('Chủ đề','Topic')} ${i+1} · ${Lof(x).length} ${t('bài','lessons')} · ${qOf(x.id).length} ${t('câu','questions')}</div><h3>${x.name}</h3></div></div><p>${x.sub}</p><div class="tbar"><i style="width:${tpct(x.id)}%"></i></div><div class="ft">${pill(x.id)}<span class="row" style="gap:8px">${b!=null?`<span class="tnum">${b}%</span>`:''}${starsH(starN(b||0))}</span></div></a>`}).join('')}</div>
  <section class="card stack"><div class="row" style="justify-content:space-between"><div><h2>${t('Huy hiệu của em','Your badges')}</h2><p class="muted">${t(`Em đã có ${S.badges.length}/${BADGES.length} huy hiệu.`,`You have ${S.badges.length} of ${BADGES.length} badges.`)}</p></div><a class="btn" href="#giay-khen">${t('Giấy khen của em','Your certificate')}</a></div>
@@ -352,7 +353,7 @@ function vType(){if(!TY.text)newType(TY.lv||0);const st=S.tstar||{};
  return `<div class="stack"><section class="card stack nofocus"><div><h1>${t('May du hành bàn phím','May’s keyboard journey')}</h1><p>${t('Giúp May bay qua 5 vùng đất. Đặt hai ngón trỏ lên <kbd>F</kbd> và <kbd>J</kbd>, nhìn màn hình rồi gõ theo dòng chữ. Không cần gõ nhanh, gõ đúng mới được nhiều sao.','Help May fly across 5 lands. Rest your index fingers on <kbd>F</kbd> and <kbd>J</kbd>, look at the screen and type the line. No need to rush: accuracy earns the stars.')}</p></div>
  <div class="tg-levels">${SCN.map((sc,si)=>`<div class="tg-grp"><div class="tg-gh"><i style="background:${sc[2]}"></i>${t(sc[0],sc[1])}</div><div class="chips">${TL.map((l,i)=>l[0]!==si?'':`<button class="chip ${i===TY.lv?'sel':''}" data-act="lv" data-v="${i}">${i+1}. ${t(l[1],l[2])} ${starsH(st[i]||0)}</button>`).join('')}</div></div>`).join('')}</div></section>
  <section class="card stack tgcard${tkbOn()?' tk':''}"><div id="type-zone" class="stack"></div>
- <div class="row tg-mode"><span class="lbl">${t('Em gõ bằng','Type with')}</span><div class="seg"><button class="${tkbOn()?'on':''}" data-act="tkb" data-v="touch">${t('Bàn phím trên màn hình','On-screen keyboard')}</button><button class="${tkbOn()?'':'on'}" data-act="tkb" data-v="real">${t('Bàn phím thật','Real keyboard')}</button></div></div>
+ <div class="row tg-mode"><span class="lbl">${t('Em gõ bằng','Type with')}</span><div class="seg"><button class="${tkbOn()?'on':''}" data-act="tkb" data-v="touch">${t('Bàn phím trên màn hình','On-screen keyboard')}</button><button class="${tkbOn()?'':'on'}" data-act="tkb" data-v="real">${t('Bàn phím thật','Real keyboard')}</button></div>${helpLink('type','Cách chơi','How to play')}</div>
  ${tkbOn()?'':`<div class="row nofocus"><label class="muted" for="type-in">${t('Dùng máy tính bảng? Chạm vào ô này để mở bàn phím','On a tablet? Tap this box to open the keyboard')}</label><input id="type-in" class="field" style="width:150px" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${t('Gõ ở đây','Type here')}"></div>`}
  <p class="muted nofocus">${t('Nhớ tắt bộ gõ tiếng Việt khi chơi. Tiếng bàn phím đang là','Turn off any Vietnamese typing tool while you play. Keyboard sound')}: <b>${t(...(KEYMODES.find(k=>k[0]===S.keys)||KEYMODES[0]).slice(1))}</b>. <button class="linkbtn" data-act="panel">${t('Đổi tiếng phím','Change it')}</button></p></section></div>`}
 function lineH(){const {text,pos}=TY,ch=text[pos];return `<span class="d">${esc(text.slice(0,pos))}</span>${ch==null?'':`<span class="c">${ch===' '?'␣':esc(ch)}</span>`}<span class="r">${esc(text.slice(pos+1))}</span>`}
@@ -396,7 +397,7 @@ function vGloss(){const g=GLOSS[GL.i];
 let resetArm=false;
 function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luyện','Not started')}</span>`:p>=80?`<span class="pill ok">${t('Vững','Solid')}</span>`:p>=50?`<span class="pill warn">${t('Cần ôn thêm','Needs review')}</span>`:`<span class="pill bad">${t('Còn yếu','Weak')}</span>`;
  const who=S.name?esc(S.name):t('con','your child');
- return `<div class="stack"><section class="card lesson"><h1>${t('Dành cho phụ huynh','For parents')}</h1><p>${t('Trang này giúp ba mẹ theo dõi tiến độ của con và hiểu cách dùng May Học Tin để ôn thi IC3 Spark.','This page shows your child’s progress and explains how to use May Học Tin to prepare for IC3 Spark.')}</p></section>
+ return `<div class="stack"><section class="card lesson"><h1>${t('Dành cho phụ huynh','For parents')}</h1><p>${t('Trang này giúp ba mẹ theo dõi tiến độ của con và hiểu cách dùng May Học Tin để ôn thi IC3 Spark.','This page shows your child’s progress and explains how to use May Học Tin to prepare for IC3 Spark.')}</p><div class="row"><a class="btn" href="#huong-dan">${t('Xem hướng dẫn sử dụng','Open the user guide')}</a></div></section>
  ${vReport()}
  ${vGuide()}
  <section class="card stack"><h2>${t('Lịch học gợi ý cho bé 10 tuổi','A suggested timetable for a 10-year-old')}</h2><div class="tablebox"><table class="t"><tr><th>${t('Ngày','Day')}</th><th>${t('Buổi và giờ','When')}</th><th>${t('Làm gì','What to do')}</th></tr>
@@ -409,7 +410,7 @@ function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luy�
  <section class="card stack"><h2>${t('Xoá tiến độ','Reset progress')}</h2><p class="muted">${t('Dùng khi một bạn khác bắt đầu học trên máy này. Màu, âm thanh và ngôn ngữ được giữ nguyên.','Use this when another child starts on this device. Colours, sounds and language are kept.')}</p><div class="row"><button class="btn" data-act="reset">${resetArm?t('Bấm lần nữa để xoá toàn bộ tiến độ','Click again to erase all progress'):t('Xoá tiến độ và học lại từ đầu','Erase progress and start over')}</button></div></section></div>`}
 
 /* ============ ĐIỀU HƯỚNG + SỰ KIỆN ============ */
-const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents,'may-tinh':vSim};
+const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents,'may-tinh':vSim,'huong-dan':vHelp};
 function render(){if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType();voxAuto()}
 function go(h){const ch=view!==h;view=h;try{if(location.hash.slice(1)!==h)location.hash=h}catch(e){}render();if(ch)window.scrollTo(0,0)}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
@@ -423,6 +424,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(
  switch(a){
  case 'sim':if(SIMA(b.dataset.k,v)===false)return;break;
  case 'read':voxToggle(b);return;
+ case 'helptab':case 'helpx':helpAct(b.dataset.act,v);break;
+ case 'helpgo':helpAct('helpgo',v);panelOpen=false;go('huong-dan');return;
  case 'vox':case 'vauto':case 'vrate':case 'vtest':voxAct(b.dataset.act,v);break;
  case 'tkb':S.tkb=v;save();sfx('tap');break;
  case 'focus':setFocus(!FOCUS);sfx('tap');render();window.scrollTo(0,0);return;
