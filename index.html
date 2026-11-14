@@ -312,7 +312,7 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 .tkb{display:flex;flex-direction:column;gap:6px;width:min(100%,940px);margin:0 auto;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .tkr{display:flex;gap:5px;justify-content:center}
 .tkr1{padding:0 5%}.tkr2{padding:0 15%}
-.tkb .key{display:flex;flex-direction:column;align-items:center;justify-content:center;height:max(40px,min(clamp(46px,12.500vw,70px),14vh));font-size:clamp(18px,4.600vw,26px);font-weight:700;border-radius:10px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.tkb .key{display:flex;flex-direction:column;align-items:center;justify-content:center;height:max(40px,min(clamp(46px,12.500vw,78px),14vh));font-size:clamp(18px,4.600vw,26px);font-weight:700;border-radius:10px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .tkb .key.sp{flex:0 1 64%;text-transform:none;font-size:14px}
 .tkb .key.bump::after{content:"";width:12px;height:3px;border-radius:2px;background:currentColor;opacity:.55;margin-top:-2px}
 .tg-kb .tkb .key.next{transform:translateY(-2px) scale(1.06);box-shadow:0 0 0 4px var(--sun)}
@@ -321,6 +321,9 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 /* Ba ô thành tích nằm dưới bàn phím; trên điện thoại thu gọn cho vừa một hàng */
 #tg-stats{justify-content:center}
 @media (max-width:700px){#tg-stats{gap:6px}#tg-stats .stat{padding:3px 9px;font-size:12px}#tg-stats .stat b{font-size:16px}}
+/* Máy tính bảng dùng bàn phím chạm: khung cảnh thấp lại để cảnh, dòng chữ và bàn phím vừa một màn hình */
+.tgcard{scroll-margin-top:118px}
+@media (min-width:701px){.tgcard.tk .tg-scene{height:clamp(170px,26vh,250px)}.tgcard.tk .tg-tip{font-size:18px}.tkb .key.sp{font-size:16px}}
 /* Chế độ toàn màn hình cho Gõ phím và Phòng mô phỏng */
 body.focus header.top,body.focus #tabbar,body.focus footer,body.focus #panel,body.focus .nofocus{display:none!important}
 body.focus{padding-bottom:0}
@@ -330,6 +333,7 @@ body.focus .tgcard{padding:10px 12px}
 body.focus .tgcard,body.focus #type-zone{gap:8px}
 body.focus .tgcard h2{font-size:clamp(17px,4.400vw,24px)}
 body.focus .tg-scene{height:clamp(104px,24vh,250px)}
+@media (min-width:701px) and (min-height:900px){body.focus .tgcard .tg-scene,body.focus .tgcard.tk .tg-scene{height:clamp(250px,34vh,420px)}body.focus .tg-line{bottom:14px}}
 body.focus .tg-may{width:clamp(48px,11vh,86px);top:2px}
 body.focus .tg-line{top:auto;bottom:8px;line-height:1.35}
 body.focus .stats{gap:6px}
