@@ -318,6 +318,9 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 .tg-kb .tkb .key.next{transform:translateY(-2px) scale(1.06);box-shadow:0 0 0 4px var(--sun)}
 .tg-mode{gap:8px 12px}
 .focusbtn span{display:inline!important}
+/* Ba ô thành tích nằm dưới bàn phím; trên điện thoại thu gọn cho vừa một hàng */
+#tg-stats{justify-content:center}
+@media (max-width:700px){#tg-stats{gap:6px}#tg-stats .stat{padding:3px 9px;font-size:12px}#tg-stats .stat b{font-size:16px}}
 /* Chế độ toàn màn hình cho Gõ phím và Phòng mô phỏng */
 body.focus header.top,body.focus #tabbar,body.focus footer,body.focus #panel,body.focus .nofocus{display:none!important}
 body.focus{padding-bottom:0}

@@ -367,7 +367,7 @@ function drawType(){const z=document.getElementById('type-zone');if(!z)return;co
   <p>${t(`Chính xác <b>${TY.acc}%</b>. Tốc độ <b>${TY.cpm}</b> ký tự/phút. Chuỗi đúng dài nhất <b>${TY.maxCombo}</b> phím.`,`Accuracy <b>${TY.acc}%</b>. Speed <b>${TY.cpm}</b> keys per minute. Longest run <b>${TY.maxCombo}</b> keys.`)} ${TY.cpm>=best&&TY.cpm>0?`<span class="pill ok">${t('Kỷ lục mới của em','Your new record')}</span>`:''}</p>
   <p class="muted">${TY.stars>=3?t('Em gõ rất chuẩn.','Very tidy typing.'):t('Muốn 3 sao, em gõ chậm lại một chút và đúng từ 97% trở lên.','For 3 stars, slow down a little and reach 97% accuracy or more.')}</p>
   <div class="row"><button class="btn ${TY.stars>=3?'':'primary'}" data-act="lv" data-v="${TY.lv}">${t('Chơi lại chặng này','Play this stage again')}</button>${TY.lv<TL.length-1?`<button class="btn ${TY.stars>=3?'primary':''}" data-act="lv" data-v="${TY.lv+1}">${t('Chặng tiếp theo','Next stage')} →</button>`:''}</div></div>`}
- else h+=`<div class="stats" id="tg-stats">${statsH()}</div><div id="tg-guide" class="stack" style="gap:10px">${guideH()}</div>`;
+ else h+=`<div id="tg-guide" class="stack" style="gap:10px">${guideH()}</div><div class="stats" id="tg-stats">${statsH()}</div>`;
  z.innerHTML=h}
 function updType(bad){const q=id=>document.getElementById(id),ln=q('tg-line');if(!ln)return drawType();
  ln.innerHTML=lineH();if(bad){ln.classList.remove('shake');void ln.offsetWidth;ln.classList.add('shake')}

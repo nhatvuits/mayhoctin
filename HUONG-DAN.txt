@@ -8,7 +8,7 @@ Các tệp:
   manifest.webmanifest, icons/         thông tin cài đặt và biểu tượng
   sw.js                                lưu sẵn trang để học khi mất mạng
 
-Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v10'  trong sw.js thành v11, v12... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
+Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v11'  trong sw.js thành v12, v13... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
 
 Cài lên điện thoại:
   Android (Chrome): mở trang, bấm menu ba chấm, chọn "Cài đặt ứng dụng" hoặc "Thêm vào màn hình chính".
