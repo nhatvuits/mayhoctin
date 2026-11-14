@@ -8,10 +8,11 @@ Các tệp:
   voice.js                             giọng đọc của May (nút Nghe, May tự đọc, lời khen)
   help.js                              trang Hướng dẫn sử dụng cho bé và ba mẹ
   fb.js                                góp ý: bảng trắng để viết và Bảng góp ý ở trang chủ
+  cloud/worker.js, cloud/HUONG-DAN-CLOUD.md   máy chủ nhỏ trên Cloudflare để lưu góp ý dùng chung (không bắt buộc)
   manifest.webmanifest, icons/         thông tin cài đặt và biểu tượng
   sw.js                                lưu sẵn trang để học khi mất mạng
 
-Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v15'  trong sw.js thành v16, v17... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
+Khi cập nhật nội dung sau này: sửa dòng  const V='may-hoc-tin-v16'  trong sw.js thành v17, v18... rồi tải lại toàn bộ thư mục, để máy của các bé nhận bản mới.
 
 Cài lên điện thoại:
   Android (Chrome): mở trang, bấm menu ba chấm, chọn "Cài đặt ứng dụng" hoặc "Thêm vào màn hình chính".

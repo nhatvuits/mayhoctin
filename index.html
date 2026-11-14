@@ -319,19 +319,39 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 .fbn-top span{font-size:12px;opacity:.75}
 .fbn-draw{display:block;width:100%;height:auto;border-radius:8px;border:1px solid rgba(18,48,90,.18)}
 .fbn-txt{font-size:15px;line-height:1.4;overflow-wrap:anywhere;white-space:pre-wrap}
-.fbn-foot{display:flex;justify-content:space-between;align-items:center;font-size:12px;opacity:.9}
+.fbn-foot{padding:0;color:inherit;text-align:left;display:flex;justify-content:flex-end;align-items:center;gap:4px 12px;flex-wrap:wrap;font-size:12px}
 .fbn-acts{display:flex;gap:10px}
 .fbn .linkbtn{font-size:12px;color:#12305a;min-height:28px}
 .fbn .fbn-del{color:#b3261e;font-weight:800}
 .fb-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:16px;pointer-events:none;font-weight:600}
 .fb-empty .cloud{width:96px}
-.fb-ctl{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:4px;background:var(--cloud);border:2px solid var(--line);border-radius:999px;padding:3px 6px;font-weight:700;font-size:13px}
+.fb-ctl{position:absolute;right:10px;bottom:10px;max-width:calc(100% - 20px);display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:4px;background:var(--cloud);border:2px solid var(--line);border-radius:20px;padding:3px 6px;font-weight:700;font-size:13px}
+.fb-ctl button.on{background:var(--blue);color:var(--on)}
 .fb-ctl button{min-width:34px;height:34px;border:0;border-radius:999px;background:none;color:var(--blue);font-weight:800;font-size:18px}
 .fb-ctl button.wide{font-size:13px;padding:0 10px}
 .fb-ctl button:hover{background:var(--blue-soft)}
 .fb-sec .btn svg{width:20px;height:20px;vertical-align:-4px}
 .fb-hint{font-size:14px}
 body.fb-open{overflow:hidden}
+/* phản hồi, trạng thái, lọc, toàn màn hình */
+.fb-bar{justify-content:space-between;gap:8px 12px}
+.fb-cloud{gap:6px 14px}
+.fbn.done{filter:saturate(.55);opacity:.82}
+.fbn.wait{outline:2px dashed rgba(18,48,90,.5);outline-offset:3px}
+.fbn-reply{background:rgba(255,255,255,.78);border-left:4px solid #2f6fed;border-radius:6px;padding:6px 8px;font-size:13px;line-height:1.35}
+.fbn-reply b{display:block;font-size:12px}
+.fbn-reply p{overflow-wrap:anywhere;white-space:pre-wrap}
+.fbn-tags{display:flex;gap:6px;flex-wrap:wrap}
+.fbn-st{font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.75)}
+.fbn-st.s1{background:#2f6fed;color:#fff}
+.fbn-st.s2{background:#1b7a4f;color:#fff}
+.fbn-st.w{background:#12305a;color:#fff}
+.fbn .fbn-ok{font-weight:800;color:#1b7a4f}
+.fb-sec.full{position:fixed;inset:0;z-index:55;margin:0;border:0;border-radius:0;padding:10px 12px;gap:8px;overflow:hidden;animation:none}
+.fb-sec.full .fbw{flex:1 1 auto;height:auto;min-height:0}
+.fb-sec.full .fb-intro,.fb-sec.full .fb-hint{display:none}
+.fbm-box.sm{width:min(100%,520px)}
+.fbm-quote{background:var(--blue-soft);border-radius:10px;padding:8px 12px;overflow-wrap:anywhere;white-space:pre-wrap}
 .fbm{position:fixed;inset:0;z-index:60;background:rgba(18,48,90,.55);display:grid;place-items:center;padding:12px}
 .fbm-box{width:min(100%,760px);max-height:100%;overflow:auto;background:var(--cloud);color:var(--ink);border-radius:20px;border:2px solid var(--line);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
 .fbm-box.in{animation:pop .2s}
@@ -347,7 +367,7 @@ body.fb-open{overflow:hidden}
 .fbm-pens{display:flex;gap:6px}
 .fbm-pen{width:34px;height:34px;border-radius:50%;border:3px solid var(--cloud);box-shadow:0 0 0 2px var(--line)}
 .fbm-pen.on{box-shadow:0 0 0 3px var(--blue);transform:scale(1.1)}
-#fb-txt{width:100%;border:2px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;background:var(--cloud);color:var(--ink);resize:vertical}
+#fb-txt,#fb-in{width:100%;border:2px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;background:var(--cloud);color:var(--ink);resize:vertical}
 .fbm-warn{color:var(--bad,#b3261e);font-weight:700}
 .fbm-end{justify-content:space-between;gap:8px 12px}
 .fbm-end .muted{flex:1 1 220px;font-size:13px}
