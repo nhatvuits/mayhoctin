@@ -128,7 +128,7 @@ const smT=a=>t(a[0],a[1]);
 const smLo=(id,e)=>(e?PM[id].en.replace(/ \(.*/,''):PM[id].vi).toLowerCase().replace('cpu','CPU').replace('ram','RAM');
 const smNarrow=()=>{try{return matchMedia('(max-width:700px)').matches}catch(e){return false}};
 const smPic=(id,o)=>{const p=PM[id];return `<svg class="sm-pic" viewBox="0 0 ${p.vb[0]} ${p.vb[1]}" style="aspect-ratio:${p.vb[0]}/${p.vb[1]}" aria-hidden="true">${SD[id](o||{on:true})}</svg>`};
-const smMay=txt=>`<div class="sm-may">${CLOUD}<p class="sm-bub" aria-live="polite">${txt}</p></div>`;
+const smMay=txt=>`<div class="sm-may" data-rdbox="may" data-rdauto="1">${CLOUD}<p class="sm-bub" aria-live="polite">${txt}</p>${rdBtn()}</div>`;
 
 /* ============ KHUNG HÌNH BÀN MÁY TÍNH ============ */
 /* o: view 'desk'|'case', click (tên hành động khi chạm bộ phận), hi (viền sáng), have (bộ phận đã có; bỏ trống = đủ cả),
@@ -165,8 +165,8 @@ function smScene(o){const vb=o.view==='case'?(smNarrow()?[14,44,332,382]:[-138,4
 
 /* ============ CHẶNG 1: KHÁM PHÁ ============ */
 function smInfo(id){const p=PM[id],io=SM_IO[p.io];
- return `<section class="card sm-info"><div class="sm-picbox">${smPic(id)}</div>
- <div><h2>${smN(id)}</h2><div class="row" style="gap:6px;margin-top:6px"><span class="pill none">${t('Tiếng Anh: '+p.en,'Tiếng Việt: '+p.vi)}</span><span class="pill ${io[2]}">${t(io[0],io[1])}</span></div></div>
+ return `<section class="card sm-info" data-rdbox="info" data-rdauto="2"><div class="sm-picbox">${smPic(id)}</div>
+ <div><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><h2>${smN(id)}</h2>${rdBtn()}</div><div class="row" style="gap:6px;margin-top:6px"><span class="pill none">${t('Tiếng Anh: ','Tiếng Việt: ')}<span data-vl="${t('en','vi')}">${t(p.en,p.vi)}</span></span><span class="pill ${io[2]}">${t(io[0],io[1])}</span></div></div>
  <p><b>${t('Làm gì?','What does it do?')}</b> ${smT(p.does)}</p><p><b>${t('Giống như gì?','What is it like?')}</b> ${smT(p.like)}</p>
  <div class="tip sm-fact"><b>${t('Bạn biết không?','Did you know?')}</b> ${smT(p.fact)}</div></section>`}
 function smExplore(){const m=SM(),view=SIM.view,ids=view==='case'?['case'].concat(SM_IN):SM_OUT.concat(['case']),all=m.seen.length>=PARTS.length;
@@ -241,9 +241,9 @@ function smQuiz(){const q=SIM.q,m=SM();
   body=`<p class="qtext">${t(`Chạm vào <b>${p.vi}</b> trong hình.`,`Tap the <b>${smLo(it.ans,1)}</b> in the picture.`)}</p><div class="sm-spot">${smScene({view:inCase?'case':'desk',click:lock?null:'ans',on:true,cab:SM_OUT,hi:lock?[it.ans]:[],hic:'#3ddc97'})}</div>`}
  else if(it.k==='which')body=`<p class="qtext">${smT(it.q)}</p><div class="sm-opts">${it.opts.map(id=>`<button class="sm-opt ${cls(id)}" data-act="sim" data-k="ans" data-v="${id}" ${lock?'disabled':''}>${smPic(id)}<span>${smN(id)}</span></button>`).join('')}</div>`;
  else body=`<div class="row" style="flex-wrap:nowrap;align-items:center"><div class="sm-qpic">${smPic(it.ans)}</div><p class="qtext">${t(`<b>${p.vi}</b> dùng để làm gì?`,`What does the <b>${smLo(it.ans,1)}</b> do?`)}</p></div><div class="opts">${it.opts.map((id,k)=>`<button class="opt ${cls(id)}" data-act="sim" data-k="ans" data-v="${id}" ${lock?'disabled':''}><span class="mk">${'ABC'[k]}</span><span>${smT(PM[id].does)}</span></button>`).join('')}</div>`;
- return `<section class="card stack"><div class="work-top"><b>${t('Câu','Question')} ${q.i+1}/${n}</b><span class="pill ok">${t('Đúng','Right')}: ${q.ok}</span></div><div class="bar"><i style="width:${(q.i+(lock?1:0))/n*100}%"></i></div>
- <div class="qtype">${it.k==='spot'?t('Tìm trong hình','Find it in the picture'):it.k==='which'?t('Chọn đúng hình','Pick the right picture'):t('Chọn một đáp án','Choose one answer')}</div>${body}
- ${lock?`<div class="fb ${right?'good':'wrong'}"><h3>${right?t('Chính xác!','Correct!'):t('Chưa đúng rồi','Not quite')}</h3><p><b>${smN(it.ans)}</b>: ${smT(p.does)} ${smT(p.like)}</p></div><div class="row"><button class="btn primary" data-act="sim" data-k="qnext">${q.i<n-1?t('Câu tiếp theo','Next question'):t('Xem kết quả','See my result')} →</button></div>`:''}</section>`}
+ return `<section class="card stack" data-rdbox="sq" data-rdauto="2"><div class="work-top nord"><b>${t('Câu','Question')} ${q.i+1}/${n}</b><span class="pill ok">${t('Đúng','Right')}: ${q.ok}</span></div><div class="bar"><i style="width:${(q.i+(lock?1:0))/n*100}%"></i></div>
+ <div class="qhead"><div class="qtype">${it.k==='spot'?t('Tìm trong hình','Find it in the picture'):it.k==='which'?t('Chọn đúng hình','Pick the right picture'):t('Chọn một đáp án','Choose one answer')}</div>${rdBtn()}</div>${body}
+ ${lock?`<div class="fb ${right?'good':'wrong'}" data-rdbox="fb" data-rdauto="3"><h3>${right?t('Chính xác!','Correct!'):t('Chưa đúng rồi','Not quite')}</h3><p><b>${smN(it.ans)}</b>: ${smT(p.does)} ${smT(p.like)}</p></div><div class="row"><button class="btn primary" data-act="sim" data-k="qnext">${q.i<n-1?t('Câu tiếp theo','Next question'):t('Xem kết quả','See my result')} →</button></div>`:''}</section>`}
 
 /* ============ TRANG CHÍNH CỦA PHÒNG MÔ PHỎNG ============ */
 const SM_ICON='<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>';

@@ -90,7 +90,7 @@ function tone(f,at,d,type,g,f2){const a=actx();if(!a)return;const t0=a.currentTi
  v.gain.setValueAtTime(.0001,t0);v.gain.exponentialRampToValueAtTime(g||.15,t0+.008);v.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(v);v.connect(a.destination);o.start(t0);o.stop(t0+d+.03)}
 function noise(at,d,ftype,freq,g){const a=actx();if(!a)return;if(!NB){NB=a.createBuffer(1,Math.floor(a.sampleRate*.2),a.sampleRate);const ch=NB.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=Math.random()*2-1}
  const t0=a.currentTime+at,s=a.createBufferSource(),f=a.createBiquadFilter(),v=a.createGain();s.buffer=NB;f.type=ftype;f.frequency.value=freq;v.gain.setValueAtTime(g,t0);v.gain.exponentialRampToValueAtTime(.0001,t0+d);s.connect(f);f.connect(v);v.connect(a.destination);s.start(t0);s.stop(t0+d+.02)}
-function sfx(n,k){if(!S.sfx)return;try{
+function sfx(n,k){if(n==='ok'&&k!=null)voxPraise('ok');else if(n==='bad')voxPraise('bad');else if(n==='win')voxPraise('win');if(!S.sfx)return;try{
  if(n==='ok'&&S.okSnd==='coin')coin();
  else if(n==='ok'){const up=Math.min(k||0,6)*40;tone(660+up,0,.12,'triangle',.16);tone(880+up,.09,.2,'triangle',.16)}
  else if(n==='bad'){tone(230,0,.16,'sine',.12);tone(185,.13,.24,'sine',.1)}
@@ -189,7 +189,7 @@ function finish(){W.done=true;W.confirm=false;clearInterval(tick);
 
 function qHtml(it,reveal){const q=lq(it.q),st=it.st,L='ABCDEF';
  const lab=q.yn?t('Chọn Đúng hoặc Sai cho mỗi câu','Choose Yes or No for each statement'):{type:t('Gõ câu trả lời','Type your answer'),one:t('Chọn 1 đáp án','Choose 1 answer'),multi:t(`Chọn ${q.n} đáp án`,`Choose ${q.n} answers`),sort:t('Xếp mỗi mục vào đúng nhóm','Put each item in the right group'),order:t('Bấm các bước theo đúng thứ tự','Tap the steps in the right order'),spot:t('Bấm vào đúng chỗ trên hình','Click the right spot in the picture')}[q.k];
- let h=`<div class="qtype">${lab}</div><p class="qtext">${esc(q.q)}</p>`;const dis=reveal?'disabled':'';
+ let h=`<div class="qhead"><div class="qtype">${lab}</div>${rdBtn()}</div><p class="qtext">${esc(q.q)}</p>`;const dis=reveal?'disabled':'';
  if(q.k==='one'||q.k==='multi'){const isSel=i=>q.k==='one'?st.v===i:st.v.includes(i),isOk=i=>q.k==='one'?i===0:i<q.n;
   h+='<div class="opts">'+st.perm.map((i,p)=>`<button class="opt ${q.k==='multi'?'sq':''} ${isSel(i)?'sel':''} ${reveal?(isOk(i)?'ok':isSel(i)?'bad':''):''}" data-act="pick" data-v="${i}" ${dis}><span class="mk">${L[p]}</span><span>${esc(q.o[i])}</span></button>`).join('')+'</div>'}
  if(q.k==='sort'){h+='<div>'+st.perm.map(i=>`<div class="srow"><span>${esc(q.items[i][0])}</span><div class="chips">${q.g.map((g,gi)=>`<button class="chip ${st.v[i]===gi?'sel':''} ${reveal?(q.items[i][1]===gi?'ok':st.v[i]===gi?'bad':''):''}" data-act="assign" data-i="${i}" data-v="${gi}" ${dis}>${esc(g)}</button>`).join('')}</div></div>`).join('')+'</div>'}
@@ -215,6 +215,7 @@ function renderChrome(){document.documentElement.lang=S.lang;if(S.skin&&S.skin!=
   <div class="row" style="justify-content:space-between"><h2>${t('Hồ sơ học tập','Learner profiles')}</h2><button class="btn" data-act="panel">${t('Xong','Done')}</button></div>${profH()}
   <h2>${t('Chọn màu em thích','Pick your colours')}</h2>
   <div class="swatches">${SKINS.map(s=>`<button class="sw ${(S.skin||'sky')===s[0]?'on':''}" data-act="skin" data-v="${s[0]}"><i style="background:${s[3]}"></i><span>${t(s[1],s[2])}</span></button>`).join('')}</div>
+  ${voxPanel()}
   <h2>${t('Âm thanh','Sounds')}</h2>
   <div class="row"><span class="lbl">${t('Âm thanh khen thưởng','Reward sounds')}</span><div class="seg"><button class="${S.sfx?'on':''}" data-act="sfx" data-v="1">${t('Bật','On')}</button><button class="${S.sfx?'':'on'}" data-act="sfx" data-v="0">${t('Tắt','Off')}</button></div></div>
   <div class="row"><span class="lbl">${t('Tiếng khi trả lời đúng','Sound for a right answer')}</span><div class="seg"><button class="${S.okSnd==='coin'?'':'on'}" data-act="oksnd" data-v="chime">${t('Chuông','Chime')}</button><button class="${S.okSnd==='coin'?'on':''}" data-act="oksnd" data-v="coin">${t('Đồng xu','Coin')}</button></div></div>
@@ -258,8 +259,8 @@ function vTopic(id){const x=T(id);if(!x)return vHome();const i=TOPICS.findIndex(
  return `<div class="stack" style="--tc:${x.c}"><a class="back" href="#trang-chu">← ${t('Về danh sách chủ đề','Back to all topics')}</a>
  <section class="card"><div class="row"><span class="icb" style="background:${x.c}">${ic(x.icon)}</span><div><div class="muted">${t('Chủ đề','Topic')} ${i+1}</div><h1>${x.name}</h1></div></div></section>
  ${levelBar()}${id==='mt'?simPromo():''}
- ${Lof(x).map((l,k)=>`<section class="card lesson"><div class="no">${t('Bài','Lesson')} ${k+1}</div><h2>${l[0]}</h2>${l[1]}${l[2]==='word'?wordUI(none,true):l[2]==='excel'?excelUI(none,true):''}${lvOf()===1?lwFrame(id,k):''}</section>`).join('')}
- <div class="tip"><h3>${t('Mẹo của May','May’s tip')}</h3><p>${x.tip}</p></div>
+ ${Lof(x).map((l,k)=>`<section class="card lesson"><div class="row" style="justify-content:space-between"><div class="no">${t('Bài','Lesson')} ${k+1}</div>${rdBtn('les'+k)}</div><div class="rdbox" id="les${k}"><h2>${l[0]}</h2>${l[1]}</div>${l[2]==='word'?wordUI(none,true):l[2]==='excel'?excelUI(none,true):''}${lvOf()===1?lwFrame(id,k):''}</section>`).join('')}
+ <div class="tip" data-rdbox="tip">${rdBtn()}<h3>${t('Mẹo của May','May’s tip')}</h3><p>${x.tip}</p></div>
  <section class="card"><div class="row" style="justify-content:space-between"><div><h3>${t('Em đọc xong rồi chứ?','Finished reading?')}</h3><p class="muted">${t(`${qOf(id).length} câu hỏi, có giải thích sau mỗi câu. Đúng từ 90% được 3 sao.`,`${qOf(id).length} questions with an explanation after each one. Score 90% or more for 3 stars.`)}</p></div><button class="btn primary" data-act="practice" data-v="${id}">${t('Luyện tập chủ đề này','Practise this topic')}</button></div></section>
  ${nx?`<a class="back" href="#hoc-${nx.id}">${t('Chủ đề kế tiếp','Next topic')}: ${nx.name} →</a>`:''}</div>`}
 
@@ -267,9 +268,9 @@ function vWork(){if(!W)return vHome();if(W.done)return vResult();
  const it=W.items[W.i],n=W.items.length,exam=W.mode==='exam',rv=it.st.checked,last=W.i===n-1;
  let h=`<div class="stack"><div class="work-top"><b>${esc(wTitle())}</b><span>${t('Câu','Question')} ${W.i+1}/${n}</span>${exam?`<span class="timer" id="timer">${fmt(left())}</span>`:W.combo>=2?`<span class="pill warn">${t(`${W.combo} câu đúng liên tiếp`,`${W.combo} in a row`)}</span>`:''}</div>
  <div class="bar"><i style="width:${exam?W.items.filter(touched).length/n*100:(W.i+(rv?1:0))/n*100}%"></i></div>
- <section class="card stack">${qHtml(it,rv)}</section>`;
+ <section class="card stack" data-rdbox="q" data-rdauto="2">${qHtml(it,rv)}</section>`;
  if(!exam){if(rv){const ok=correct(it),good=en()?['Correct!','Well done!','That’s right!','Brilliant!']:['Chính xác!','Giỏi lắm!','Đúng rồi!','Tuyệt vời!'];
-   h+=`<div class="fb ${ok?'good':'wrong'}"><h3>${ok?good[W.i%4]:t('Chưa đúng rồi','Not quite')}</h3>${ok?'':`<p><b>${t('Đáp án đúng','Correct answer')}:</b> ${esc(ansText(it.q))}</p>`}<p>${esc(lq(it.q).e)}</p></div>
+   h+=`<div class="fb ${ok?'good':'wrong'}" data-rdbox="fb" data-rdauto="3">${rdBtn()}<h3>${ok?good[W.i%4]:t('Chưa đúng rồi','Not quite')}</h3>${ok?'':`<p><b>${t('Đáp án đúng','Correct answer')}:</b> ${esc(ansText(it.q))}</p>`}<p>${esc(lq(it.q).e)}</p></div>
    <div class="row"><button class="btn primary" data-act="next">${last?t('Xem kết quả','See my result'):t('Câu tiếp theo','Next question')}</button></div>`}
   else h+=`<div class="row"><button class="btn primary" data-act="check" ${answered(it)?'':'disabled'}>${t('Kiểm tra','Check')}</button><button class="btn" data-act="quit">${t('Dừng lại','Stop')}</button></div>`}
  else{const un=W.items.filter(x=>!answered(x)).length,fl=W.items.filter(x=>x.st.flag).length;
@@ -387,8 +388,8 @@ let GL={i:0,flip:false};
 function glRows(f){f=(f||'').toLowerCase();return GLOSS.filter(g=>!f||g.join(' ').toLowerCase().includes(f)).map(g=>`<tr><td><b>${g[0]}</b></td><td>${g[1]}</td><td>${t(g[2],g[3])}</td></tr>`).join('')||`<tr><td colspan="3">${t('Không tìm thấy từ nào. Em thử từ khác nhé.','No word found. Try another one.')}</td></tr>`}
 function vGloss(){const g=GLOSS[GL.i];
  return `<div class="stack"><section class="card stack"><h1>${t('Từ điển Anh – Việt','English – Vietnamese dictionary')}</h1><p>${t(`Bài thi và phần mềm thường dùng từ tiếng Anh. Em học ${GLOSS.length} từ này là đủ dùng.`,`The exam and most software use English words. These ${GLOSS.length} words cover what you need.`)}</p>
- <button class="flash ${GL.flip?'flip':''}" data-act="flip">${GL.flip?`<span class="vi">${g[1]}</span><span>${t(g[2],g[3])}</span><span class="muted">${g[0]}</span>`:`<span class="en">${g[0]}</span><span>${t('Bấm để xem nghĩa','Tap to see the meaning')}</span>`}</button>
- <div class="row"><button class="btn" data-act="gprev">← ${t('Thẻ trước','Previous')}</button><span class="muted tnum">${GL.i+1}/${GLOSS.length}</span><button class="btn primary" data-act="gnext">${t('Thẻ tiếp','Next card')} →</button></div></section>
+ <button class="flash ${GL.flip?'flip':''}" data-act="flip" id="gl-card" data-rdauto="1">${GL.flip?`<span class="vi" data-vl="vi">${g[1]}</span><span>${t(g[2],g[3])}</span><span class="muted" data-vl="en">${g[0]}</span>`:`<span class="en" data-vl="en">${g[0]}</span><span class="nord">${t('Bấm để xem nghĩa','Tap to see the meaning')}</span>`}</button>
+ <div class="row">${rdBtn('gl-card')}<button class="btn" data-act="gprev">← ${t('Thẻ trước','Previous')}</button><span class="muted tnum">${GL.i+1}/${GLOSS.length}</span><button class="btn primary" data-act="gnext">${t('Thẻ tiếp','Next card')} →</button></div></section>
  <section class="card stack"><h2>${t('Tra nhanh','Quick look-up')}</h2><input id="g-search" class="field" placeholder="${t('Gõ từ cần tìm, ví dụ: save','Type a word, for example: save')}" autocomplete="off"><div class="tablebox"><table class="t"><thead><tr><th>English</th><th>Tiếng Việt</th><th>${t('Nghĩa là','Meaning')}</th></tr></thead><tbody id="g-body">${glRows('')}</tbody></table></div></section></div>`}
 
 /* ---- phụ huynh ---- */
@@ -409,7 +410,7 @@ function vParents(){const st=p=>p==null?`<span class="pill none">${t('Chưa luy�
 
 /* ============ ĐIỀU HƯỚNG + SỰ KIỆN ============ */
 const VIEWS={'giay-khen':vCert,'trang-chu':vHome,'thi-thu':vExamIntro,'lam-bai':vWork,'go-phim':vType,'tu-dien':vGloss,'phu-huynh':vParents,'may-tinh':vSim};
-function render(){if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType()}
+function render(){if(FOCUS&&!focusable())setFocus(false);document.body.classList.toggle('focus',FOCUS);checkBadges();renderChrome();document.getElementById('app').innerHTML=view.startsWith('hoc-')?vTopic(view.slice(4)):(VIEWS[view]||vHome)();if(view==='go-phim')drawType();voxAuto()}
 function go(h){const ch=view!==h;view=h;try{if(location.hash.slice(1)!==h)location.hash=h}catch(e){}render();if(ch)window.scrollTo(0,0)}
 function pick(arr,n){return shuffle(arr).slice(0,n)}
 
@@ -421,6 +422,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(
  const it=W&&!W.done?W.items[W.i]:null,lock=!it||it.st.checked;
  switch(a){
  case 'sim':if(SIMA(b.dataset.k,v)===false)return;break;
+ case 'read':voxToggle(b);return;
+ case 'vox':case 'vauto':case 'vrate':case 'vtest':voxAct(b.dataset.act,v);break;
  case 'tkb':S.tkb=v;save();sfx('tap');break;
  case 'focus':setFocus(!FOCUS);sfx('tap');render();window.scrollTo(0,0);return;
  case 'lw':{const f=LWA[b.dataset.w];if(f){f(v);sfx('tap');drawW(b.dataset.w)}return}
@@ -461,7 +464,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(
  case 'flip':GL.flip=!GL.flip;sfx('flip');break;
  case 'gnext':GL.i=(GL.i+1)%GLOSS.length;GL.flip=false;sfx('tap');break;
  case 'gprev':GL.i=(GL.i-1+GLOSS.length)%GLOSS.length;GL.flip=false;sfx('tap');break;
- case 'reset':if(!resetArm){resetArm=true;break}{const keep={name:'',lang:S.lang,skin:S.skin,sfx:S.sfx,keys:S.keys,song:S.song,okSnd:S.okSnd};S=DB.profiles[DB.cur]=Object.assign(FRESH(),keep);save();W=null;resetArm=false;go('trang-chu')}return;
+ case 'reset':if(!resetArm){resetArm=true;break}{const keep={name:'',lang:S.lang,skin:S.skin,sfx:S.sfx,keys:S.keys,song:S.song,okSnd:S.okSnd,vox:S.vox,vauto:S.vauto,vrate:S.vrate};S=DB.profiles[DB.cur]=Object.assign(FRESH(),keep);save();W=null;resetArm=false;go('trang-chu')}return;
  default:return}
  render()});
 document.addEventListener('pointerdown',e=>{if(view!=='go-phim'||!e.target.closest)return;const b=e.target.closest('[data-tk]');if(!b)return;e.preventDefault();const c=b.dataset.tk;lastKey=Date.now();keySnd(c===' '?'space':'key',c);typeChar(c)});

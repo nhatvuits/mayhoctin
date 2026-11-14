@@ -308,6 +308,18 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 .lvbar button.on{border-color:var(--blue);background:var(--blue);color:var(--on);box-shadow:0 4px 0 var(--blue-d)}
 .lvbar button.on span{color:var(--on);opacity:.9}
 @media (max-width:520px){.lvbar button{padding:6px 8px}.lvbar button b{font-size:15px}.lvbar button span{font-size:11px}}
+/* Giọng đọc của May (voice.js): nút Nghe */
+.rd{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:4px 12px 4px 9px;border:2px solid var(--line);border-radius:999px;background:var(--cloud);color:var(--blue);font-weight:700;font-size:14px;line-height:1}
+.rd svg{width:20px;height:20px}
+.rd .b,.rd.on .a{display:none}
+.rd.on .b{display:inline}
+.rd.on{background:var(--blue);border-color:var(--blue);color:var(--on);animation:rdpulse 1.2s ease-in-out infinite}
+@keyframes rdpulse{50%{box-shadow:0 0 0 5px var(--blue-soft)}}
+.rdbox{display:flex;flex-direction:column;gap:8px}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tip>.rd,.fb>.rd{float:right;margin:0 0 6px 10px}
+.sm-may>.rd{align-self:center}
+@media (max-width:520px){.sm-may>.rd span{display:none}.sm-may>.rd{padding:4px 8px}}
 /* Bàn phím chạm trên màn hình (Gõ phím) */
 .tkb{display:flex;flex-direction:column;gap:6px;width:min(100%,940px);margin:0 auto;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .tkr{display:flex;gap:5px;justify-content:center}
@@ -418,6 +430,7 @@ body.focus .sm-top .icb,body.focus .sm-ttl .muted{display:none}
 <script src="data.js"></script>
 <script src="en.js"></script>
 <script src="extra.js"></script>
+<script src="voice.js"></script>
 <script src="sim.js"></script>
 <script src="app.js"></script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
